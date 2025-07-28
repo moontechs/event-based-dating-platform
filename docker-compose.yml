@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: laravel-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: laravel_dating
+      POSTGRES_USER: laravel_user
+      POSTGRES_PASSWORD: laravel_password
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - laravel
+
+  keydb:
+    image: eqalpha/keydb:latest
+    container_name: laravel-keydb
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - ./docker/keydb:/data
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
