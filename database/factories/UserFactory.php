@@ -27,7 +27,14 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => Hash::make(Str::random(40)),
+            'full_name' => fake()->name(),
+            'whatsapp_number' => fake()->phoneNumber(),
+            'photo_path' => fake()->imageUrl(400, 400, 'people'),
+            'relationship_intent' => fake()->randomElement(['dont_know', 'monogamous', 'open_relationship', 'casual_fling']),
+            'status' => fake()->randomElement(['active', 'inactive']),
+            'status_reason' => fake()->optional(0.3)->sentence(),
+            'terms_accepted' => fake()->boolean(80),
             'remember_token' => Str::random(10),
         ];
     }

@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +11,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Always run production seeders (required for all environments)
+        $this->call([
+            TimeZoneSeeder::class,
+            EventCategorySeeder::class,
         ]);
+
+        // Run development seeders only in local/staging environments
+        if (app()->environment(['local', 'staging'])) {
+            $this->call([
+                UserSeeder::class,
+                EventSeeder::class,
+                EventAttendanceSeeder::class,
+                ConnectionRequestSeeder::class,
+            ]);
+        }
     }
 }
