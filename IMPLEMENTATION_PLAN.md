@@ -46,7 +46,7 @@ This document outlines the complete implementation plan for the Event-Based Dati
 - [x] Configure queue drivers for KeyDB
 
 ### 1.3 Database Schema Design
-- [ ] Extend default Laravel users migration with additional columns:
+- [x] Extend default Laravel users migration with additional columns:
   - full_name (string)
   - whatsapp_number (string)
   - photo_path (string, nullable)
@@ -55,26 +55,23 @@ This document outlines the complete implementation plan for the Event-Based Dati
   - status_reason (text, nullable)
   - terms_accepted (boolean, default: false)
   - Keep default: id, name, email, email_verified_at, password, remember_token, timestamps
-- [ ] Create magic_links migration:
+- [x] Create magic_links migration:
   - id, email, token, expires_at, used_at, created_at
-- [ ] Create events migration:
+- [x] Create events migration:
   - id, title, description, extended_description, image_path
   - date_time (timestamp), timezone, category_id, city, country
   - is_published (boolean, default: false), created_at, updated_at
-- [ ] Create event_categories migration:
+- [x] Create event_categories migration:
   - id, name, is_active (boolean, default: true), created_at, updated_at
-- [ ] Create event_attendances migration:
+- [x] Create event_attendances migration:
   - id, user_id (foreign), event_id (foreign), created_at, updated_at
   - Unique constraint on (user_id, event_id)
-- [ ] Create connection_requests migration:
+- [x] Create connection_requests migration:
   - id, sender_id (foreign to users), receiver_id (foreign to users)
   - status (enum: pending, accepted, cancelled, default: pending)
   - created_at, updated_at
-- [ ] Create time_zones migration:
+- [x] Create time_zones migration:
   - id, name, display_name, utc_offset, is_active (boolean, default: true)
-- [ ] Create admin_actions migration for logging:
-  - id, admin_id (foreign to users), action_type, target_type, target_id
-  - details (jsonb), created_at
 
 ### 1.4 Database Factories
 - [ ] Create UserFactory extending default Laravel UserFactory:
