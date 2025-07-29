@@ -30,13 +30,19 @@ A web-based platform that connects people through shared event experiences, allo
 ## 3. User Authentication & Registration
 
 ### 3.1 Login System
-- **Magic Link Authentication**: Email-only login system
-- **Verification Methods**: 
-  - Email with 6-digit code
-  - Email with clickable magic link
-  - Both methods provide equivalent access
+- **Email-only Authentication**: Simple login system using email address only
+- **Unified Authentication Method**: 
+  - Single email containing both 6-digit verification code and clickable login button
+  - User can either enter the 6-digit code or click the login button
+  - Same token used for both methods (the 6-digit code serves as the clickable login token)
+  - Code expires in 15 minutes for security
 - **Registration**: First-time login automatically creates account
 - **Email Verification**: Implicit through successful login
+- **User Experience**: 
+  - User enters email and receives one email with both options
+  - After requesting login, user is automatically redirected to code entry form
+  - Code input has autofocus and auto-submits when 6 digits are entered
+  - All interactive elements have proper cursor styling
 
 ### 3.2 User States
 - **Unregistered**: Has not logged in
@@ -223,6 +229,12 @@ A web-based platform that connects people through shared event experiences, allo
 ## 9. Notification System
 
 ### 9.1 Email Notifications
+**Authentication Emails:**
+- Unified login emails containing both verification code and clickable login button
+- User-friendly language avoiding technical terms like "magic link"
+- Professional email template with clear call-to-action
+- 15-minute expiration for security
+
 **Match Notifications:**
 - Triggered when mutual connection is established
 - Sent to both users
@@ -297,10 +309,11 @@ A web-based platform that connects people through shared event experiences, allo
 - Content delivery optimization
 
 ### 13.3 Email System
-- Magic link generation and validation
-- Notification email templates
-- Email delivery reliability
+- 6-digit verification code generation and validation (same code used as clickable login token)
+- Professional email templates with user-friendly language
+- Email delivery reliability using Laravel's queue system
 - Bounce and error handling
+- Rate limiting for authentication attempts
 
 ---
 
