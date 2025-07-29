@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RelationshipIntent;
+use App\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 /**
  * @mixin IdeHelperUser
@@ -54,6 +57,57 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'terms_accepted' => 'boolean',
+            'status' => UserStatus::class,
+            'relationship_intent' => RelationshipIntent::class,
         ];
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(EventAttendance::class);
+    }
+
+    public function sentConnectionRequests(): HasMany
+    {
+        return $this->hasMany(ConnectionRequest::class, 'sender_id');
+    }
+
+    public function receivedConnectionRequests(): HasMany
+    {
+        return $this->hasMany(ConnectionRequest::class, 'receiver_id');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', UserStatus::Active);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('status', UserStatus::Inactive);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === UserStatus::Active;
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->status === UserStatus::Inactive;
+    }
+
+    public function hasCompletedProfile(): bool
+    {
+        return ! empty($this->full_name)
+            && ! empty($this->photo_path)
+            && ! empty($this->whatsapp_number)
+            && $this->relationship_intent !== null
+            && $this->terms_accepted === true;
+    }
+
+    public static function generateSecurePassword(): string
+    {
+        return Str::random(40);
     }
 }

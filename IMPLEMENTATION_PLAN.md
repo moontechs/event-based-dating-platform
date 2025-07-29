@@ -160,15 +160,15 @@ This document outlines the complete implementation plan for the Event-Based Dati
 ## Phase 2: User Management & Profiles
 
 ### 2.1 User Models & Relationships
-- [ ] Extend default User model with relationships:
+- [x] Extend default User model with relationships:
   - hasMany(EventAttendance)
   - hasMany(ConnectionRequest, 'sender_id')
   - hasMany(ConnectionRequest, 'receiver_id')
-- [ ] Create UserStatus enum (Active, Inactive)
-- [ ] Create RelationshipIntent enum (DontKnow, Monogamous, OpenRelationship, CasualFling)
-- [ ] Add user status scopes and accessors
-- [ ] Implement profile completion checking
-- [ ] Add password generation helper for non-admin users (40 random characters)
+- [x] Create UserStatus enum (Active, Inactive)
+- [x] Create RelationshipIntent enum (DontKnow, Monogamous, OpenRelationship, CasualFling)
+- [x] Add user status scopes and accessors
+- [x] Implement profile completion checking
+- [x] Add password generation helper for non-admin users (40 random characters)
 
 ### 2.2 User Registration Flow
 - [ ] Create ProfileSetupController
