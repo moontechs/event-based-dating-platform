@@ -57,6 +57,19 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]);
 
+        // Create some users who haven't filled out their profile
+        User::factory()
+            ->count(10)
+            ->create([
+                'status' => 'active',
+                'terms_accepted' => false,
+                'email_verified_at' => now(),
+                'full_name' => null,
+                'whatsapp_number' => null,
+                'photo_path' => null,
+                'relationship_intent' => null,
+            ]);
+
         // Create users with specific relationship intents for testing
         foreach (['monogamous', 'open_relationship', 'casual_fling'] as $intent) {
             User::factory()

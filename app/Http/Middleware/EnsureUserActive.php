@@ -17,7 +17,7 @@ class EnsureUserActive
 
         $user = Auth::user();
 
-        if ($user->status !== 'active') {
+        if (! $user->isActive()) {
             Auth::logout();
 
             return redirect()->route('login')->withErrors([

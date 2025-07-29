@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('full_name');
-            $table->string('whatsapp_number');
+            $table->string('full_name')->nullable();
+            $table->string('whatsapp_number')->nullable();
             $table->string('photo_path')->nullable();
-            $table->enum('relationship_intent', ['dont_know', 'monogamous', 'open_relationship', 'casual_fling']);
+            $table->enum('relationship_intent', ['dont_know', 'monogamous', 'open_relationship', 'casual_fling'])->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->text('status_reason')->nullable();
             $table->boolean('terms_accepted')->default(false);

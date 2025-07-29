@@ -171,17 +171,17 @@ This document outlines the complete implementation plan for the Event-Based Dati
 - [x] Add password generation helper for non-admin users (40 random characters)
 
 ### 2.2 User Registration Flow
-- [ ] Create ProfileSetupController
-- [ ] Build mandatory profile form with fields:
+- [x] Create ProfileSetupController
+- [x] Build mandatory profile form with fields:
   - Photo upload (10MB limit, image validation)
   - Full name validation (update 'name' field)
   - WhatsApp number validation
   - Relationship intent dropdown
   - Terms acceptance checkbox
-- [ ] Implement image upload handling and storage
-- [ ] Add image resizing and optimization
-- [ ] Create profile completion middleware
-- [ ] Add form validation rules and error handling
+- [x] Implement image upload handling and storage
+- [x] Add image resizing and optimization
+- [x] Create profile completion middleware
+- [x] Add form validation rules and error handling
 
 ### 2.3 Profile Management
 - [ ] Create ProfileController for viewing/editing

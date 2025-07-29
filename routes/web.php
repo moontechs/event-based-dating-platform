@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MagicLinkController;
+use App\Http\Controllers\ProfileSetupController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -20,13 +21,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 
 // Profile setup (for first-time users)
 Route::middleware(['auth', 'user.active'])->group(function () {
-    Route::get('/profile/setup', function () {
-        return view('profile.setup');
-    })->name('profile.setup');
-
-    Route::post('/profile/setup', function () {
-        // Profile setup logic will be implemented later
-    })->name('profile.setup.post');
+    Route::get('/profile/setup', [ProfileSetupController::class, 'show'])->name('profile.setup');
+    Route::post('/profile/setup', [ProfileSetupController::class, 'store'])->name('profile.setup.store');
 });
 
 // Routes for inactive users (profile access only)

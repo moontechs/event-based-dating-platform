@@ -12,8 +12,12 @@ use Illuminate\View\View;
 
 class MagicLinkController extends Controller
 {
-    public function showLoginForm(): View
+    public function showLoginForm(): View|RedirectResponse
     {
+        if (auth()->check()) {
+            return redirect()->route('dashboard');
+        }
+
         return view('auth.login');
     }
 

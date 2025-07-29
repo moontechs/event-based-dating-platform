@@ -26,10 +26,6 @@ class EnsureProfileComplete
 
     private function isProfileComplete($user): bool
     {
-        return ! empty($user->full_name) &&
-               ! empty($user->whatsapp_number) &&
-               ! empty($user->photo_path) &&
-               ! empty($user->relationship_intent) &&
-               $user->terms_accepted;
+        return $user->hasCompletedProfile();
     }
 }
