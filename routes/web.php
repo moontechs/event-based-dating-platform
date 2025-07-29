@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MagicLinkController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -8,26 +10,16 @@ Route::get('/', function () {
 })->name('home');
 
 // Authentication routes (Magic Link)
-Route::prefix('auth')->name('auth.')->group(function () {
-    Route::get('/login', function () {
-        return view('auth.login');
-    })->name('login');
-
-    Route::post('/login', function () {
-        // Magic link login logic will be implemented later
-    })->name('login.post');
-
-    Route::get('/verify/{token}', function () {
-        // Magic link verification logic will be implemented later
-    })->name('verify');
-
-    Route::post('/logout', function () {
-        // Logout logic will be implemented later
-    })->name('logout');
-});
+Route::get('/login', [MagicLinkController::class, 'showLoginForm'])->name('login');
+Route::post('/magic-link/send', [MagicLinkController::class, 'sendMagicLink'])->name('magic-link.send');
+Route::get('/magic-link/verify', [MagicLinkController::class, 'verify'])->name('magic-link.verify');
+Route::post('/magic-link/verify', [MagicLinkController::class, 'verify'])->name('magic-link.verify.post');
+Route::get('/verify', [MagicLinkController::class, 'showVerificationForm'])->name('verify.form');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Profile setup (for first-time users)
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'user.active'])->group(function () {
     Route::get('/profile/setup', function () {
         return view('profile.setup');
     })->name('profile.setup');
@@ -37,8 +29,28 @@ Route::middleware(['auth'])->group(function () {
     })->name('profile.setup.post');
 });
 
-// Authenticated routes
-Route::middleware(['auth', 'profile.complete'])->group(function () {
+// Routes for inactive users (profile access only)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', function () {
+        return view('profile.show');
+    })->name('profile.show');
+
+    Route::get('/profile/edit', function () {
+        return view('profile.edit');
+    })->name('profile.edit');
+
+    Route::put('/profile', function () {
+        // Profile update logic will be implemented later
+    })->name('profile.update');
+});
+
+// Authenticated routes (active users only)
+Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return redirect()->route('events.index');
+    })->name('dashboard');
+
     // Dashboard/Events
     Route::get('/events', function () {
         return view('events.index');

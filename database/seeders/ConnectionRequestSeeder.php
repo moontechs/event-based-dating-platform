@@ -16,88 +16,92 @@ class ConnectionRequestSeeder extends Seeder
         // Get users who attended the same events (eligible for connections)
         $sharedAttendances = DB::table('event_attendances as ea1')
             ->join('event_attendances as ea2', 'ea1.event_id', '=', 'ea2.event_id')
-            ->where('ea1.user_id', '!=', 'ea2.user_id')
+            ->whereColumn('ea1.user_id', '!=', 'ea2.user_id')
             ->join('users as u1', 'ea1.user_id', '=', 'u1.id')
             ->join('users as u2', 'ea2.user_id', '=', 'u2.id')
-            ->where('u1.status', 'active')
-            ->where('u2.status', 'active')
+            ->where('u1.status', '=', 'active')
+            ->where('u2.status', '=', 'active')
             ->select('ea1.user_id as sender_id', 'ea2.user_id as receiver_id')
             ->distinct()
-            ->get()
-            ->toArray();
+            ->limit(50)
+            ->get();
 
-        if (empty($sharedAttendances)) {
+        if ($sharedAttendances->isEmpty()) {
             return;
         }
 
-        // Create pending connection requests
-        $pendingCount = min(15, count($sharedAttendances));
-        $pendingConnections = collect($sharedAttendances)->random($pendingCount);
+        $created = collect();
 
+        // Create some pending connection requests
+        $pendingConnections = $sharedAttendances->take(15);
         foreach ($pendingConnections as $connection) {
-            ConnectionRequest::firstOrCreate([
-                'sender_id' => $connection->sender_id,
-                'receiver_id' => $connection->receiver_id,
-            ], [
-                'status' => 'pending',
-            ]);
+            $key = $connection->sender_id.'-'.$connection->receiver_id;
+            if (! $created->has($key)) {
+                ConnectionRequest::firstOrCreate([
+                    'sender_id' => $connection->sender_id,
+                    'receiver_id' => $connection->receiver_id,
+                ], [
+                    'status' => 'pending',
+                ]);
+                $created->put($key, true);
+            }
         }
 
-        // Create accepted connection requests (matches)
-        $acceptedCount = min(8, count($sharedAttendances) - $pendingCount);
-        if ($acceptedCount > 0) {
-            $remainingConnections = collect($sharedAttendances)
-                ->diff($pendingConnections)
-                ->random($acceptedCount);
-
-            foreach ($remainingConnections as $connection) {
+        // Create some accepted connection requests (matches)
+        $acceptedConnections = $sharedAttendances->skip(15)->take(10);
+        foreach ($acceptedConnections as $connection) {
+            $key = $connection->sender_id.'-'.$connection->receiver_id;
+            if (! $created->has($key)) {
                 ConnectionRequest::firstOrCreate([
                     'sender_id' => $connection->sender_id,
                     'receiver_id' => $connection->receiver_id,
                 ], [
                     'status' => 'accepted',
                 ]);
+                $created->put($key, true);
             }
         }
 
         // Create some cancelled connection requests
-        $cancelledCount = min(5, count($sharedAttendances) - $pendingCount - $acceptedCount);
-        if ($cancelledCount > 0) {
-            $remainingConnections = collect($sharedAttendances)
-                ->diff($pendingConnections)
-                ->diff($remainingConnections ?? collect())
-                ->random($cancelledCount);
-
-            foreach ($remainingConnections as $connection) {
+        $cancelledConnections = $sharedAttendances->skip(25)->take(5);
+        foreach ($cancelledConnections as $connection) {
+            $key = $connection->sender_id.'-'.$connection->receiver_id;
+            if (! $created->has($key)) {
                 ConnectionRequest::firstOrCreate([
                     'sender_id' => $connection->sender_id,
                     'receiver_id' => $connection->receiver_id,
                 ], [
                     'status' => 'cancelled',
                 ]);
+                $created->put($key, true);
             }
         }
 
         // Create some mutual connections (both users sent requests to each other)
-        $mutualCount = min(3, count($sharedAttendances));
-        $mutualConnections = collect($sharedAttendances)->random($mutualCount);
-
+        $mutualConnections = $sharedAttendances->skip(30)->take(5);
         foreach ($mutualConnections as $connection) {
-            // Request from A to B
-            ConnectionRequest::firstOrCreate([
-                'sender_id' => $connection->sender_id,
-                'receiver_id' => $connection->receiver_id,
-            ], [
-                'status' => 'accepted',
-            ]);
+            $keyAB = $connection->sender_id.'-'.$connection->receiver_id;
+            $keyBA = $connection->receiver_id.'-'.$connection->sender_id;
 
-            // Request from B to A
-            ConnectionRequest::firstOrCreate([
-                'sender_id' => $connection->receiver_id,
-                'receiver_id' => $connection->sender_id,
-            ], [
-                'status' => 'accepted',
-            ]);
+            if (! $created->has($keyAB)) {
+                ConnectionRequest::firstOrCreate([
+                    'sender_id' => $connection->sender_id,
+                    'receiver_id' => $connection->receiver_id,
+                ], [
+                    'status' => 'accepted',
+                ]);
+                $created->put($keyAB, true);
+            }
+
+            if (! $created->has($keyBA)) {
+                ConnectionRequest::firstOrCreate([
+                    'sender_id' => $connection->receiver_id,
+                    'receiver_id' => $connection->sender_id,
+                ], [
+                    'status' => 'accepted',
+                ]);
+                $created->put($keyBA, true);
+            }
         }
     }
 }
