@@ -184,14 +184,14 @@ This document outlines the complete implementation plan for the Event-Based Dati
 - [x] Add form validation rules and error handling
 
 ### 2.3 Profile Management
-- [ ] Create ProfileController for viewing/editing
-- [ ] Implement profile access level logic:
+- [x] Create ProfileController for viewing/editing
+- [x] Implement profile access level logic:
   - Public view (photo, first name only from 'name', relationship intent)
   - Full view (all details for connected users)
-- [ ] Build profile edit forms
-- [ ] Add profile photo management (upload/delete)
-- [ ] Implement email read-only protection
-- [ ] Create profile view permissions system
+- [x] Build profile edit forms
+- [x] Add profile photo management (upload)
+- [x] Implement email read-only protection
+- [x] Create profile view permissions system
 
 ## Phase 3: Event System
 

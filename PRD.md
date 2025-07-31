@@ -79,6 +79,10 @@ A web-based platform that connects people through shared event experiences, allo
 - Users can edit all profile information post-registration except email
 - Email field is read-only after registration (tied to authentication)
 - Profile page accessible from main navigation
+- **User Slugs**: URLs using user slugs instead of IDs
+  - Profile URLs: `/users/abcdef` instead of `/users/123`
+  - Automatic slug generation using randomized strings
+  - Privacy-enhanced URLs that don't expose internal user IDs
 - Future expansion: Extended profile fields
 
 ## 5. Event System
@@ -137,7 +141,7 @@ A web-based platform that connects people through shared event experiences, allo
 **Attendee Visibility:**
 - All users who marked attendance are visible
 - Display: Photo + first name
-- Each attendee links to their profile
+- Each attendee links to their profile using slug-based URLs (`/users/user-slug`)
 
 ## 6. Connection System
 
@@ -257,6 +261,7 @@ A web-based platform that connects people through shared event experiences, allo
 - Event-based connection requirements
 - Admin oversight capabilities
 - **Photo Moderation**: Report-based system for inappropriate content
+- **Privacy-Enhanced URLs**: User slugs prevent exposure of internal user IDs
 
 ## 11. Future Enhancements
 
@@ -297,10 +302,13 @@ A web-based platform that connects people through shared event experiences, allo
 ## 13. Technical Implementation Notes
 
 ### 13.1 Database Considerations
-- User profile data structure
+- User profile data structure with slug field for SEO-friendly URLs
 - Event and attendance relationship modeling
 - Connection request state management
 - Admin action logging
+- **User Slug System**:
+  - Unique slug field generated from randomized strings
+  - Route model binding for seamless URL resolution
 
 ### 13.2 File Management
 - Image upload and storage system

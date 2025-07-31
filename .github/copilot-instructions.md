@@ -8,7 +8,7 @@
 ## Laravel/PHP instructions
 
 - For DB pivot tables, use correct alphabetical order, like "project_role" instead of "role_project"
-- **Eloquent Observers** should be registered in Eloquent Models with PHP Attributes, and not in AppServiceProvider. Example: `#[ObservedBy([UserObserver::class])]` with `use Illuminate\Database\Eloquent\Attributes\ObservedBy;` on top
+- **Eloquent Observers** should be registered in Eloquent Models with PHP Attributes, and not in AppServiceProvider. Use observer classes instead boot function in a model class. Example: `#[ObservedBy([UserObserver::class])]` with `use Illuminate\Database\Eloquent\Attributes\ObservedBy;` on top
 - When generating Controllers, put validation in Form Request classes
 - Aim for "slim" Controllers and put larger logic pieces in Service classes
 - Use Laravel helpers instead of `use` section classes whenever possible. Examples: use `auth()->id()` instead of `Auth::id()` and adding `Auth` in the `use` section. Another example: use `redirect()->route()` instead of `Redirect::route()`.

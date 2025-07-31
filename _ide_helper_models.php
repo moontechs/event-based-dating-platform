@@ -193,19 +193,28 @@ namespace App\Models{
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
- * @property string $full_name
- * @property string $whatsapp_number
+ * @property string|null $full_name
+ * @property string|null $whatsapp_number
  * @property string|null $photo_path
- * @property string $relationship_intent
- * @property string $status
+ * @property \App\Enums\RelationshipIntent|null $relationship_intent
+ * @property \App\Enums\UserStatus $status
  * @property string|null $status_reason
  * @property bool $terms_accepted
+ * @property string|null $slug
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventAttendance> $attendances
+ * @property-read int|null $attendances_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ConnectionRequest> $receivedConnectionRequests
+ * @property-read int|null $received_connection_requests_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ConnectionRequest> $sentConnectionRequests
+ * @property-read int|null $sent_connection_requests_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User active()
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User inactive()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
@@ -219,6 +228,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhotoPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRelationshipIntent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereStatusReason($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTermsAccepted($value)

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MagicLinkController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileSetupController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,17 +28,9 @@ Route::middleware(['auth', 'user.active'])->group(function () {
 
 // Routes for inactive users (profile access only)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', function () {
-        return view('profile.show');
-    })->name('profile.show');
-
-    Route::get('/profile/edit', function () {
-        return view('profile.edit');
-    })->name('profile.edit');
-
-    Route::put('/profile', function () {
-        // Profile update logic will be implemented later
-    })->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Authenticated routes (active users only)
@@ -60,18 +53,8 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
         // Mark attendance logic will be implemented later
     })->name('events.attend');
 
-    // Profile management
-    Route::get('/profile', function () {
-        return view('profile.show');
-    })->name('profile.show');
-
-    Route::get('/profile/edit', function () {
-        return view('profile.edit');
-    })->name('profile.edit');
-
-    Route::put('/profile', function () {
-        // Profile update logic will be implemented later
-    })->name('profile.update');
+    // Profile management (duplicated routes for active users)
+    // These routes are handled by the middleware group above
 
     // Connection system
     Route::prefix('connections')->name('connections.')->group(function () {
@@ -79,7 +62,7 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
             return view('connections.index');
         })->name('index');
 
-        Route::post('/request/{user}', function () {
+        Route::post('/request/{user:slug}', function () {
             // Send connection request logic will be implemented later
         })->name('request');
 
@@ -93,7 +76,14 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
     });
 
     // User profiles (view other users)
-    Route::get('/users/{user}', function () {
-        return view('users.show');
-    })->name('users.show');
+    Route::get('/users', function () {
+        $users = \App\Models\User::active()
+            ->where('id', '!=', auth()->id())
+            ->whereNotNull('slug')
+            ->get();
+
+        return view('users.index', compact('users'));
+    })->name('users.index');
+
+    Route::get('/users/{user:slug}', [ProfileController::class, 'show'])->name('users.show');
 });

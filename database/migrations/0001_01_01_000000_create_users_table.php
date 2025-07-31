@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->text('status_reason')->nullable();
             $table->boolean('terms_accepted')->default(false);
+            $table->string('slug')->unique();
             $table->rememberToken();
             $table->timestamps();
         });

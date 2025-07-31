@@ -3,39 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RelationshipIntent;
+use App\Models\User;
 use App\Services\ProfileService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
-class ProfileSetupController extends Controller
+class ProfileController extends Controller
 {
     public function __construct(
         private ProfileService $profileService
     ) {}
 
-    public function show(): View
+    public function show(?User $user = null): View
+    {
+        /** @var User $currentUser */
+        $currentUser = auth()->user();
+        $profileUser = $user ?? $currentUser;
+
+        $hasFullAccess = $this->profileService->hasFullProfileAccess($currentUser, $profileUser);
+
+        return view('profile.show', [
+            'user' => $profileUser,
+            'currentUser' => $currentUser,
+            'hasFullAccess' => $hasFullAccess,
+            'isOwnProfile' => $currentUser->id === $profileUser->id,
+        ]);
+    }
+
+    public function edit(): View
     {
         $user = auth()->user();
 
-        return view('profile.setup', [
+        return view('profile.edit', [
             'user' => $user,
             'relationshipIntents' => RelationshipIntent::cases(),
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
+        /** @var User $user */
+        $user = auth()->user();
+
         $validated = $request->validate([
-            'photo' => ['required', 'image', 'max:10240'], // 10MB limit
+            'photo' => ['nullable', 'image', 'max:10240'],
             'full_name' => ['required', 'string', 'max:255'],
             'whatsapp_number' => ['required', 'string', 'max:20'],
             'relationship_intent' => ['required', Rule::enum(RelationshipIntent::class)],
-            'terms_accepted' => ['required', 'accepted'],
         ]);
-
-        $user = auth()->user();
 
         if ($request->hasFile('photo')) {
             if ($user->photo_path) {
@@ -50,6 +67,6 @@ class ProfileSetupController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('dashboard')->with('success', 'Profile completed successfully!');
+        return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
     }
 }
