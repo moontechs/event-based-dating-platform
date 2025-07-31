@@ -42,7 +42,7 @@ class LoginController extends Controller
         $password = Str::random(40);
 
         return User::create([
-            'name' => $email,
+            'name' => Str::random(10),
             'email' => $email,
             'password' => bcrypt($password),
             'email_verified_at' => now(),

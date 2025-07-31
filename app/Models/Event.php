@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,10 +19,9 @@ class Event extends Model
     protected $fillable = [
         'title',
         'description',
-        'extended_description',
         'image_path',
         'date_time',
-        'timezone',
+        'timezone_id',
         'category_id',
         'city',
         'country',
@@ -31,6 +31,10 @@ class Event extends Model
     protected $casts = [
         'date_time' => 'datetime',
         'is_published' => 'boolean',
+    ];
+
+    protected $appends = [
+        'attendees_count',
     ];
 
     public function category(): BelongsTo
@@ -46,6 +50,11 @@ class Event extends Model
     public function attendees(): HasManyThrough
     {
         return $this->hasManyThrough(User::class, EventAttendance::class, 'event_id', 'id', 'id', 'user_id');
+    }
+
+    public function timeZone(): BelongsTo
+    {
+        return $this->belongsTo(TimeZone::class, 'timezone_id');
     }
 
     public function scopePublished($query)
@@ -107,7 +116,6 @@ class Event extends Model
             return $query->where(function ($q) use ($search) {
                 $q->where('title', 'ILIKE', "%{$search}%")
                     ->orWhere('description', 'ILIKE', "%{$search}%")
-                    ->orWhere('extended_description', 'ILIKE', "%{$search}%")
                     ->orWhere('city', 'ILIKE', "%{$search}%")
                     ->orWhere('country', 'ILIKE', "%{$search}%");
             });
@@ -143,5 +151,38 @@ class Event extends Model
     public function getAttendeesCountAttribute(): int
     {
         return $this->attendances()->count();
+    }
+
+    public function getFormattedTimezoneAttribute(): ?string
+    {
+        if (! $this->timeZone) {
+            return null;
+        }
+
+        return $this->timeZone->display_name;
+    }
+
+    public function getLocalDateTimeAttribute(): Carbon
+    {
+        return $this->date_time->setTimezone($this->timeZone->name);
+    }
+
+    public function getDateTimeInTimezone(?string $timezone = null): Carbon
+    {
+        $targetTimezone = $timezone ?? $this->timeZone->name;
+
+        return $this->date_time->setTimezone($targetTimezone);
+    }
+
+    public function getTimezoneOffsetAttribute(): string
+    {
+        $timezone = new \DateTimeZone($this->timeZone->name);
+        $datetime = new \DateTime('now', $timezone);
+        $offset = $timezone->getOffset($datetime);
+
+        $hours = intval($offset / 3600);
+        $minutes = abs(($offset % 3600) / 60);
+
+        return sprintf('%+03d:%02d', $hours, $minutes);
     }
 }

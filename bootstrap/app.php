@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'user.active' => \App\Http\Middleware\EnsureUserActive::class,
             'profile.complete' => \App\Http\Middleware\EnsureProfileComplete::class,
+            'can.mark.attendance' => \App\Http\Middleware\EnsureCanMarkAttendance::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

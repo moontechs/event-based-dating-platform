@@ -7,15 +7,16 @@ use App\Models\EventCategory;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class EventService
 {
     public function getFilteredEvents(array $filters = [], int $perPage = 12): LengthAwarePaginator
     {
         $query = Event::query()
-            ->with(['category', 'attendances.user'])
+            ->with(['category', 'attendances.user', 'timeZone'])
             ->published()
-            ->orderBy('date_time', 'asc');
+            ->orderBy('date_time', 'desc');
 
         // Apply filters
         if (! empty($filters['category'])) {
@@ -43,6 +44,7 @@ class EventService
     {
         return Event::with([
             'category',
+            'timeZone',
             'attendances.user' => function ($query) {
                 $query->select('id', 'name', 'photo_path', 'slug');
             },
@@ -55,7 +57,7 @@ class EventService
             $user = auth()->user();
         }
 
-        if (! $user || $user->status !== 'active') {
+        if (! $user || $user->isInactive()) {
             return false;
         }
 
@@ -68,7 +70,7 @@ class EventService
             $user = auth()->user();
         }
 
-        if (! $user || $user->status !== 'active') {
+        if (! $user || $user->isInactive()) {
             return false;
         }
 
@@ -156,7 +158,7 @@ class EventService
 
     public function searchEvents(string $query, int $perPage = 12): LengthAwarePaginator
     {
-        return Event::with(['category'])
+        return Event::with(['category', 'timeZone'])
             ->published()
             ->search($query)
             ->orderBy('date_time', 'asc')
@@ -180,5 +182,46 @@ class EventService
             })
             ->orderBy('date_time', 'desc')
             ->get();
+    }
+
+    public function getUniqueCities(): Collection
+    {
+        return Event::published()
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+    }
+
+    public function getUniqueCountries(): Collection
+    {
+        return Event::published()
+            ->whereNotNull('country')
+            ->where('country', '!=', '')
+            ->distinct()
+            ->orderBy('country')
+            ->pluck('country');
+    }
+
+    public function getUniqueCityCountryPairs(): Collection
+    {
+        return Event::published()
+            ->whereNotNull('city')
+            ->whereNotNull('country')
+            ->where('city', '!=', '')
+            ->where('country', '!=', '')
+            ->select('city', 'country')
+            ->distinct()
+            ->orderBy('country')
+            ->orderBy('city')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'city' => $event->city,
+                    'country' => $event->country,
+                    'display' => $event->city.', '.$event->country,
+                ];
+            });
     }
 }

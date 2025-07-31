@@ -18,6 +18,10 @@ class UserObserver
     public function creating(User $user): void
     {
         $user->slug = Str::random();
+
+        if ($user->full_name !== null) {
+            $user->name = strtok($user->full_name, ' ');
+        }
     }
 
     /**
@@ -26,6 +30,11 @@ class UserObserver
     public function updated(User $user): void
     {
         //
+    }
+
+    public function updating(User $user): void
+    {
+        $user->name = strtok($user->full_name, ' ');
     }
 
     /**

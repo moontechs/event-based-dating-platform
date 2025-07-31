@@ -2,7 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\TimeZone;
+use DB;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
@@ -25,15 +29,14 @@ class EventFactory extends Factory
 
         $cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'];
         $countries = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Japan', 'Brazil'];
-        $timezones = ['UTC-8', 'UTC-7', 'UTC-6', 'UTC-5', 'UTC-4', 'UTC-3', 'UTC+0', 'UTC+1', 'UTC+2', 'UTC+9'];
+        $eventImages = Storage::disk('public')->files('test-events');
 
         return [
             'title' => fake()->randomElement($eventTypes),
             'description' => fake()->sentence(12),
-            'extended_description' => fake()->paragraphs(3, true),
-            'image_path' => fake()->imageUrl(800, 600, 'event'),
+            'image_path' => fake()->randomElement($eventImages),
             'date_time' => fake()->dateTimeBetween('-1 month', '+3 months'),
-            'timezone' => fake()->randomElement($timezones),
+            'timezone_id' => fake()->randomElement(TimeZone::all())->id,
             'category_id' => fake()->numberBetween(1, 10),
             'city' => fake()->randomElement($cities),
             'country' => fake()->randomElement($countries),

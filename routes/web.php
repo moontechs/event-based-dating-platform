@@ -48,7 +48,9 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
     Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
     // Event Attendance
-    Route::post('/events/{event}/attend', [AttendanceController::class, 'toggle'])->name('events.attend');
+    Route::post('/events/{event}/attend', [AttendanceController::class, 'toggle'])
+        ->name('events.attend')
+        ->middleware('can.mark.attendance');
 
     // Profile management (duplicated routes for active users)
     // These routes are handled by the middleware group above

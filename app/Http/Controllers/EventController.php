@@ -19,8 +19,10 @@ class EventController extends Controller
 
         $events = $this->eventService->getFilteredEvents($filters, 12);
         $categories = $this->eventService->getEventCategories();
+        $cities = $this->eventService->getUniqueCities();
+        $countries = $this->eventService->getUniqueCountries();
 
-        return view('events.index', compact('events', 'categories', 'filters'));
+        return view('events.index', compact('events', 'categories', 'cities', 'countries', 'filters'));
     }
 
     public function show(Event $event): View
@@ -38,14 +40,27 @@ class EventController extends Controller
 
     public function search(Request $request): View
     {
-        $request->validate([
-            'q' => 'required|string|min:2|max:255',
-        ]);
+        $query = null;
+        $events = collect();
 
-        $query = $request->input('q');
-        $events = $this->eventService->searchEvents($query, 12);
+        if ($request->has('q') && $request->filled('q')) {
+            $request->validate([
+                'q' => 'required|string|min:2|max:255',
+            ]);
+
+            $query = $request->input('q');
+
+            // Get additional filters for search
+            $filters = $request->only(['category', 'city', 'country']);
+            $filters['search'] = $query;
+
+            $events = $this->eventService->getFilteredEvents($filters, 12);
+        }
+
         $categories = $this->eventService->getEventCategories();
+        $cities = $this->eventService->getUniqueCities();
+        $countries = $this->eventService->getUniqueCountries();
 
-        return view('events.search', compact('events', 'query', 'categories'));
+        return view('events.search', compact('events', 'query', 'categories', 'cities', 'countries'));
     }
 }

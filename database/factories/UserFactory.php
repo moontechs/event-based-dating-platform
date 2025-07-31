@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -30,7 +32,7 @@ class UserFactory extends Factory
             'password' => Hash::make(Str::random(40)),
             'full_name' => fake()->name(),
             'whatsapp_number' => fake()->phoneNumber(),
-            'photo_path' => fake()->imageUrl(400, 400, 'people'),
+            'photo_path' => Arr::random(Storage::disk('public')->files('test-profiles')),
             'relationship_intent' => fake()->randomElement(['dont_know', 'monogamous', 'open_relationship', 'casual_fling']),
             'status' => fake()->randomElement(['active', 'inactive']),
             'status_reason' => fake()->optional(0.3)->sentence(),

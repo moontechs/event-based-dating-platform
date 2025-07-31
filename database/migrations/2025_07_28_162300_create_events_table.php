@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->text('extended_description');
             $table->string('image_path')->nullable();
             $table->timestamp('date_time');
-            $table->string('timezone');
+            $table->foreignId('timezone_id')->constrained('time_zones');
             $table->foreignId('category_id')->constrained('event_categories');
             $table->string('city');
             $table->string('country');

@@ -14,13 +14,13 @@ class EventAttendanceSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::where('status', 'active')->get();
+        $users = User::where('status', 'active')->whereNotNull('full_name')->get();
         $events = Event::where('is_published', true)->get();
 
         // Generate realistic attendance patterns
         foreach ($events as $event) {
-            // Each event gets 3-15 attendees
-            $attendeeCount = fake()->numberBetween(3, 15);
+            // Each event gets 0-15 attendees
+            $attendeeCount = fake()->numberBetween(0, 15);
             $selectedUsers = $users->random($attendeeCount);
 
             foreach ($selectedUsers as $user) {
