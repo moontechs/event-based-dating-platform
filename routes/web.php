@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MagicLinkController;
 use App\Http\Controllers\ProfileController;
@@ -40,18 +42,13 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
         return redirect()->route('events.index');
     })->name('dashboard');
 
-    // Dashboard/Events
-    Route::get('/events', function () {
-        return view('events.index');
-    })->name('events.index');
+    // Events
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/search', [EventController::class, 'search'])->name('events.search');
+    Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
-    Route::get('/events/{event}', function () {
-        return view('events.show');
-    })->name('events.show');
-
-    Route::post('/events/{event}/attend', function () {
-        // Mark attendance logic will be implemented later
-    })->name('events.attend');
+    // Event Attendance
+    Route::post('/events/{event}/attend', [AttendanceController::class, 'toggle'])->name('events.attend');
 
     // Profile management (duplicated routes for active users)
     // These routes are handled by the middleware group above

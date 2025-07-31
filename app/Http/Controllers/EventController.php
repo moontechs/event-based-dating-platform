@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Event;
+use App\Services\EventService;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class EventController extends Controller
+{
+    public function __construct(
+        private EventService $eventService
+    ) {}
+
+    public function index(Request $request): View
+    {
+        $filters = $request->only(['category', 'city', 'country', 'start_date', 'end_date', 'search']);
+
+        $events = $this->eventService->getFilteredEvents($filters, 12);
+        $categories = $this->eventService->getEventCategories();
+
+        return view('events.index', compact('events', 'categories', 'filters'));
+    }
+
+    public function show(Event $event): View
+    {
+        $event = $this->eventService->getEventWithAttendees($event->id);
+
+        if (! $event || ! $event->is_published) {
+            abort(404);
+        }
+
+        $statistics = $this->eventService->getEventStatistics($event);
+
+        return view('events.show', compact('event', 'statistics'));
+    }
+
+    public function search(Request $request): View
+    {
+        $request->validate([
+            'q' => 'required|string|min:2|max:255',
+        ]);
+
+        $query = $request->input('q');
+        $events = $this->eventService->searchEvents($query, 12);
+        $categories = $this->eventService->getEventCategories();
+
+        return view('events.search', compact('events', 'query', 'categories'));
+    }
+}

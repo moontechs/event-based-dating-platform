@@ -196,14 +196,14 @@ This document outlines the complete implementation plan for the Event-Based Dati
 ## Phase 3: Event System
 
 ### 3.1 Event Models & Categories
-- [ ] Create Event model with relationships:
+- [x] Create Event model with relationships:
   - belongsTo(EventCategory)
   - hasMany(EventAttendance)
   - hasManyThrough(User, EventAttendance)
-- [ ] Create EventCategory model
-- [ ] Create TimeZone model with seed data
-- [ ] Implement event status scopes (published/draft)
-- [ ] Add event date/time handling with PostgreSQL timestamp types
+- [x] Create EventCategory model
+- [x] Create TimeZone model with seed data
+- [x] Implement event status scopes (published/draft)
+- [x] Add event date/time handling with PostgreSQL timestamp types
 
 ### 3.2 Event Display System
 - [ ] Create EventController for public listing
