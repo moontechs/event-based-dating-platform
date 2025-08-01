@@ -109,7 +109,7 @@ class ConnectionRequest extends Model
     /**
      * Check if users are already connected (have accepted connection)
      */
-    public static function areUsersConnected(User $sender, User $receiver): bool
+    public static function usersConnected(User $sender, User $receiver): bool
     {
         return self::getConnectionStatus($sender, $receiver) === ConnectionStatus::Accepted;
     }
@@ -165,10 +165,26 @@ class ConnectionRequest extends Model
      */
     public function cancel(): bool
     {
-        if (! $this->isPending()) {
+        return $this->update(['status' => ConnectionStatus::Cancelled]);
+    }
+
+    /**
+     * Reject the connection request
+     */
+    public function reject(): bool
+    {
+        return $this->update(['status' => ConnectionStatus::Rejected]);
+    }
+
+    /**
+     * Disconnect users (cancel an accepted connection)
+     */
+    public function disconnect(): bool
+    {
+        if (! $this->isAccepted()) {
             return false;
         }
 
-        return $this->update(['status' => ConnectionStatus::Cancelled]);
+        return $this->cancel();
     }
 }

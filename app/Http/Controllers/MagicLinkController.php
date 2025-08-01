@@ -4,18 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendVerificationCodeEmail;
 use App\Models\MagicLink;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class MagicLinkController extends Controller
 {
-    public function showLoginForm(): View|RedirectResponse
+    public function showLoginForm(Request $request): View|RedirectResponse
     {
         if (auth()->check()) {
             return redirect()->route('dashboard');
+        }
+
+        if (config('app.env') === 'local') {
+            $userId = $request->get('userId', null);
+
+            if ($userId) {
+                $user = User::find($userId);
+
+                if ($user) {
+                    Auth::login($user);
+
+                    return redirect()->route('events.index');
+                }
+            }
         }
 
         return view('auth.login');

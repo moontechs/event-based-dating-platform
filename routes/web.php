@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\ConnectionManagementController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MagicLinkController;
@@ -58,6 +59,12 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
 
     // Connection system
     Route::prefix('connections')->name('connections.')->group(function () {
+        // Connection management pages
+        Route::get('/', [ConnectionManagementController::class, 'index'])->name('index');
+        Route::get('/incoming', [ConnectionManagementController::class, 'incoming'])->name('incoming');
+        Route::get('/sent', [ConnectionManagementController::class, 'sent'])->name('sent');
+        Route::get('/matches', [ConnectionManagementController::class, 'matches'])->name('matches');
+
         Route::post('/request/{user:slug}', [ConnectionController::class, 'sendRequest'])->name('request');
         Route::post('/cancel/{user:slug}', [ConnectionController::class, 'cancelRequest'])->name('cancel');
         Route::post('/accept/{user:slug}', [ConnectionController::class, 'acceptRequest'])->name('accept');

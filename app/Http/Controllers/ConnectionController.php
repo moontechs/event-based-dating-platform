@@ -63,7 +63,7 @@ class ConnectionController extends Controller
                 if (! $connectionRequest) {
                     DB::rollBack();
 
-                    return back()->with('error', 'Unable to send connection request. Please try again.');
+                    return back()->with('error', 'Unable to send connection request.');
                 }
 
                 DB::commit();
@@ -138,11 +138,11 @@ class ConnectionController extends Controller
 
         $connectionRequest = ConnectionRequest::where('sender_id', $user->id)
             ->where('receiver_id', $receiver->id)
-            ->where('status', ConnectionStatus::Pending)
+            ->whereIn('status', [ConnectionStatus::Pending, ConnectionStatus::Accepted])
             ->first();
 
         if (! $connectionRequest) {
-            return back()->with('error', 'No pending connection request found.');
+            return back()->with('error', 'No connection request found.');
         }
 
         if ($connectionRequest->cancel()) {

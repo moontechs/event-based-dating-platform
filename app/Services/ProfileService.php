@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\ConnectionRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -42,13 +43,6 @@ class ProfileService
             return true;
         }
 
-        return $viewer->sentConnectionRequests()
-            ->where('receiver_id', $profileOwner->id)
-            ->where('status', 'accepted')
-            ->exists() ||
-            $viewer->receivedConnectionRequests()
-                ->where('sender_id', $profileOwner->id)
-                ->where('status', 'accepted')
-                ->exists();
+        return ConnectionRequest::usersConnected($viewer, $profileOwner);
     }
 }

@@ -17,9 +17,12 @@
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen">
+        <!-- Navigation -->
+        @include('components.navigation')
+
         <!-- Flash Messages -->
         @if(session('success') || session('error') || session('info'))
-            <div class="fixed top-4 right-4 z-50 max-w-md">
+            <div class="fixed top-20 right-4 z-50 max-w-md">
                 @if(session('success'))
                     <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 shadow-md">
                         <div class="flex items-center">
