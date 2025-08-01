@@ -225,7 +225,12 @@
                                         <div class="flex-1 min-w-0">
                                             <a href="{{ route('users.show', $attendance->user->slug) }}"
                                                class="text-sm font-medium text-gray-900 hover:text-blue-600 cursor-pointer">
-                                                {{ explode(' ', $attendance->user->name)[0] }}
+                                                @if(in_array($attendance->user->id, $acceptedConnectionRequestUserIds))
+                                                    {{ $attendance->user->full_name }}
+                                                @else
+                                                    {{ $attendance->user->name }}
+                                                @endif
+
                                             </a>
                                             @if($attendance->user->relationship_intent)
                                                 <p class="text-xs text-gray-500">
@@ -234,12 +239,34 @@
                                             @endif
                                         </div>
 
-                                        <!-- Current User Indicator -->
+                                        <!-- Current User Indicator / Connection Button -->
                                         @auth
                                             @if($attendance->user->id === auth()->id())
                                                 <span class="text-xs text-blue-600 font-medium">
                                                     You
                                                 </span>
+                                            @else
+                                                @if(in_array($attendance->user->id, $pendingConnectionRequestUserIds))
+                                                    <div class="flex-shrink-0">
+                                                        <form method="POST" action="{{ route('connections.cancel', $attendance->user) }}" class="inline">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="text-xs py-1 px-2 rounded-md border border-orange-300 text-orange-600 hover:bg-orange-50 transition-colors duration-200 cursor-pointer disabled:opacity-50">
+                                                                Cancel
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @elseif(in_array($attendance->user->id, $eligibleUserIds))
+                                                    <div class="flex-shrink-0">
+                                                        <form method="POST" action="{{ route('connections.request', $attendance->user) }}" class="inline">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                    class="text-xs py-1 px-2 rounded-md border border-blue-300 text-blue-600 hover:bg-blue-50 transition-colors duration-200 cursor-pointer disabled:opacity-50">
+                                                                Connect
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
                                             @endif
                                         @endauth
                                     </div>
@@ -263,57 +290,4 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-// Handle attendance form submission with AJAX
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('attendance-form');
-    const btn = document.getElementById('attendance-btn');
-
-    if (form && btn) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Disable button and show loading
-            btn.disabled = true;
-            btn.innerHTML = '<svg class="animate-spin h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4m8-8h-4M4 12H0m16.24-7.76l-2.83 2.83M7.76 16.24l-2.83 2.83m12.73 0l-2.83-2.83M7.76 7.76L4.93 4.93"/></svg>Processing...';
-
-            // Submit form
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Reload page to update attendee list
-                    window.location.reload();
-                } else {
-                    alert(data.message || 'An error occurred');
-                    btn.disabled = false;
-                    // Restore original button text
-                    if (data.attending) {
-                        btn.innerHTML = '<svg class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>Cancel Attendance';
-                        btn.className = 'w-full py-3 px-4 text-sm font-medium rounded-lg cursor-pointer transition-colors duration-200 bg-red-600 hover:bg-red-700 text-white';
-                    } else {
-                        btn.innerHTML = '<svg class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>Mark Attendance';
-                        btn.className = 'w-full py-3 px-4 text-sm font-medium rounded-lg cursor-pointer transition-colors duration-200 bg-blue-600 hover:bg-blue-700 text-white';
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while updating attendance');
-                btn.disabled = false;
-            });
-        });
-    }
-});
-</script>
-@endpush
 @endsection

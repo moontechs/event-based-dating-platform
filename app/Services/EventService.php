@@ -46,7 +46,7 @@ class EventService
             'category',
             'timeZone',
             'attendances.user' => function ($query) {
-                $query->select('id', 'name', 'photo_path', 'slug');
+                $query->select('id', 'name', 'full_name', 'photo_path', 'slug');
             },
         ])->find($eventId);
     }
@@ -163,6 +163,20 @@ class EventService
             ->search($query)
             ->orderBy('date_time', 'asc')
             ->paginate($perPage);
+    }
+
+    public function getUsersAttendedSameEventsAsUser(User $user): \Illuminate\Database\Eloquent\Collection|Collection
+    {
+        $visitedEventIds = $user->eventAttendances()->get()->pluck('event_id')->toArray();
+
+        if (empty($visitedEventIds)) {
+            return collect();
+        }
+
+        return User::whereHas('eventAttendances.event', function ($query) use ($visitedEventIds) {
+            $query->whereIn('id', $visitedEventIds)
+                ->where('is_published', true);
+        })->get();
     }
 
     public function getUserAttendedEvents(?User $user = null): \Illuminate\Database\Eloquent\Collection

@@ -4,24 +4,6 @@
 @php use Illuminate\Support\Facades\Storage; @endphp
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        @if(session('success'))
-            <div class="mb-6 bg-teal-50 border border-teal-200 rounded-lg p-4" role="alert">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="flex-shrink-0 size-4 text-teal-600 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
-                            <path d="m9 12 2 2 4-4"></path>
-                        </svg>
-                    </div>
-                    <div class="ms-3">
-                        <p class="text-sm text-teal-800">
-                            {{ session('success') }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        @endif
-
         <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
             <!-- Header -->
             <div class="px-6 py-8 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -29,8 +11,8 @@
                     <!-- Profile Photo -->
                     <div class="flex-shrink-0">
                         @if($user->photo_path)
-                            <img class="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg" 
-                                 src="{{ Storage::url($user->photo_path) }}" 
+                            <img class="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg"
+                                 src="{{ Storage::url($user->photo_path) }}"
                                  alt="{{ $user->full_name ?? $user->name }}">
                         @else
                             <div class="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center border-4 border-white shadow-lg">
@@ -57,7 +39,7 @@
                         @endif
                         @if($isOwnProfile)
                             <div class="mt-4">
-                                <a href="{{ route('profile.edit') }}" 
+                                <a href="{{ route('profile.edit') }}"
                                    class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 py-2 px-3 cursor-pointer">
                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -172,10 +154,10 @@
                                 Connect with {{ explode(' ', $user->full_name ?? $user->name)[0] }} to see their full profile information.
                                 You can see their basic information and relationship intent.
                             </p>
-                            
+
                             @if(!$isOwnProfile)
                                 <div class="mt-6">
-                                    <button type="button" 
+                                    <button type="button"
                                             class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 py-2 px-4 cursor-pointer">
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

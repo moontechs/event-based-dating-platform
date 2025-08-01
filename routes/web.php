@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MagicLinkController;
@@ -57,21 +58,10 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
 
     // Connection system
     Route::prefix('connections')->name('connections.')->group(function () {
-        Route::get('/', function () {
-            return view('connections.index');
-        })->name('index');
-
-        Route::post('/request/{user:slug}', function () {
-            // Send connection request logic will be implemented later
-        })->name('request');
-
-        Route::post('/accept/{request}', function () {
-            // Accept connection request logic will be implemented later
-        })->name('accept');
-
-        Route::delete('/cancel/{request}', function () {
-            // Cancel connection request logic will be implemented later
-        })->name('cancel');
+        Route::post('/request/{user:slug}', [ConnectionController::class, 'sendRequest'])->name('request');
+        Route::post('/cancel/{user:slug}', [ConnectionController::class, 'cancelRequest'])->name('cancel');
+        Route::post('/accept/{user:slug}', [ConnectionController::class, 'acceptRequest'])->name('accept');
+        Route::post('/reject/{user:slug}', [ConnectionController::class, 'rejectRequest'])->name('reject');
     });
 
     // User profiles (view other users)

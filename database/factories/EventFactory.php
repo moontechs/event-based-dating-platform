@@ -3,9 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\TimeZone;
-use DB;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 /**

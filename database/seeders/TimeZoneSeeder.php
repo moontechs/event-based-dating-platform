@@ -62,7 +62,7 @@ class TimeZoneSeeder extends Seeder
         $phpTimezones = \DateTimeZone::listIdentifiers();
 
         foreach ($timezones as $timezone) {
-            if (!in_array($timezone['name'], $phpTimezones, true)) {
+            if (! in_array($timezone['name'], $phpTimezones, true)) {
                 continue;
             }
             DB::table('time_zones')->updateOrInsert(

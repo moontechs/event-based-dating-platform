@@ -177,21 +177,29 @@ A web-based platform that connects people through shared event experiences, allo
 - Both users must have active status
 
 ### 6.2 Connection Flow
-**Connection Request:**
-- Available only on profiles of users from shared events
-- "Send Connection Request" button on user profiles
-- **Request Management:**
-  - Users can cancel sent requests before acceptance
-  - Cancel button available in "Sent Requests" section
-  - Cancelled requests remove the connection possibility until re-sent
-- Multiple scenarios supported:
-  - One-way: User A sends → User B accepts
-  - Mutual: Both users send requests to each other
-  - Cancellation: User can withdraw pending requests
+**Connection Request Interface:**
+- Available on event attendee lists and user profiles from shared events
+- **Livewire-powered Connection Actions** with real-time updates
+- **Session Flash Messages** for user feedback after connection actions
+- **Dynamic Button States** reflect current connection status (Connect, Cancel, Accept, Connected)
+- **Real-time updates** without page refresh using Livewire reactivity
+
+**Request Management:**
+- Users can cancel sent requests before acceptance
+- Cancel button available on profiles and connection dashboard
+- Cancelled requests remove the connection possibility until re-sent
+- **Mutual Request Handling:** Automatic match when both users send requests to each other
+
+**Multiple Scenarios Supported:**
+- One-way: User A sends → User B accepts
+- Mutual: Both users send requests to each other (auto-accepted)
+- Cancellation: User can withdraw pending requests
+- Rejection: Users can reject incoming requests
 
 **Connection States:**
 - Pending: Request sent, awaiting response
 - Matched: Mutual connection established
+- Cancelled: Request was cancelled or rejected
 - No connection: No requests sent
 
 ### 6.3 Connection Management Dashboard

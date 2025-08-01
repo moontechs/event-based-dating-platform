@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ConnectionStatus;
 use App\Enums\RelationshipIntent;
 use App\Enums\UserStatus;
 use App\Observers\UserObserver;
@@ -66,7 +67,17 @@ class User extends Authenticatable
         ];
     }
 
-    public function attendances(): HasMany
+    public function acceptedConnectionRequests(): HasMany
+    {
+        return $this->hasMany(ConnectionRequest::class, 'sender_id')
+            ->where('status', ConnectionStatus::Accepted)
+            ->orWhere(function ($query) {
+                $query->where('receiver_id', $this->id)
+                    ->where('status', ConnectionStatus::Accepted);
+            });
+    }
+
+    public function eventAttendances(): HasMany
     {
         return $this->hasMany(EventAttendance::class);
     }

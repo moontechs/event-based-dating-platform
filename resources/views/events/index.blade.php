@@ -165,14 +165,14 @@
                             </h3>
 
                             <!-- Event Description -->
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">
                                 {{ $event->description }}
                             </p>
 
                             <!-- Event Details -->
                             <div class="space-y-2 mb-4">
                                 <!-- Date & Time -->
-                                <div class="flex items-center text-sm text-gray-500">
+                                <div class="flex items-center text-sm text-gray-500 min-h-[2.5rem]">
                                     <svg class="h-4 w-4 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>

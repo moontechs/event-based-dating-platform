@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ConnectionStatus;
+use App\Models\ConnectionRequest;
 use App\Models\Event;
 use App\Services\EventService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class EventController extends Controller
@@ -33,9 +36,35 @@ class EventController extends Controller
             abort(404);
         }
 
+        $acceptedConnectionRequestUserIds = [];
+        $pendingConnectionRequestUserIds = [];
+
+        Auth::user()->acceptedConnectionRequests()->get()->each(function (ConnectionRequest $connection) use (&$acceptedConnectionRequestUserIds) {
+            $acceptedConnectionRequestUserIds[] = $connection->receiver_id === Auth::id() ? $connection->sender_id : $connection->receiver_id;
+        });
+
+        Auth::user()->sentConnectionRequests()->get()->each(function (ConnectionRequest $connection) use (&$pendingConnectionRequestUserIds) {
+            if ($connection->status !== ConnectionStatus::Pending) {
+                return;
+            }
+
+            $pendingConnectionRequestUserIds[] = $connection->receiver_id;
+        });
+
+        $eligibleUserIds = $this->eventService
+            ->getUsersAttendedSameEventsAsUser(auth()->user())
+            ->whereNotIn('id', $acceptedConnectionRequestUserIds)
+            ->pluck('id')
+            ->toArray();
         $statistics = $this->eventService->getEventStatistics($event);
 
-        return view('events.show', compact('event', 'statistics'));
+        return view('events.show', compact(
+            'event',
+            'statistics',
+            'acceptedConnectionRequestUserIds',
+            'pendingConnectionRequestUserIds',
+            'eligibleUserIds',
+        ));
     }
 
     public function search(Request $request): View
