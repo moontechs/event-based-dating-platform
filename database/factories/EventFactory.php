@@ -31,7 +31,7 @@ class EventFactory extends Factory
 
         return [
             'title' => fake()->randomElement($eventTypes),
-            'description' => fake()->sentence(12),
+            'description' => fake()->sentences(10, true),
             'image_path' => fake()->randomElement($eventImages),
             'date_time' => fake()->dateTimeBetween('-1 month', '+3 months'),
             'timezone_id' => fake()->randomElement(TimeZone::all())->id,

@@ -1,5 +1,6 @@
 import forms from '@tailwindcss/forms'
 import typography from '@tailwindcss/typography'
+import tailwindcss from '@tailwindcss/vite';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -10,6 +11,7 @@ export default {
         './resources/views/**/*.blade.php',
         './app/Filament/**/*.php',
         './node_modules/preline/dist/*.js',
+        tailwindcss(),
     ],
 
     plugins: [
