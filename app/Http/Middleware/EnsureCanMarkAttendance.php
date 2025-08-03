@@ -32,11 +32,11 @@ class EnsureCanMarkAttendance
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'You cannot modify attendance for this event. Events can only be modified up to 2 days after they finish.',
+                    'message' => 'You cannot modify attendance for this event. Events can only be modified up to 2 days after they finish',
                 ], 403);
             }
 
-            return redirect()->back()->with('error', 'You cannot modify attendance for this event. Events can only be modified up to 2 days after they finish.');
+            return redirect()->back()->with('error', 'You cannot modify attendance for this event. Events can only be modified up to 2 days after they finish');
         }
 
         return $next($request);

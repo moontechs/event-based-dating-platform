@@ -124,7 +124,7 @@
         <div class="h-120 md:h-[40dvh] flex flex-col bg-[url('https://images.unsplash.com/photo-1542338332-76971ae8c292?q=80&w=1024&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center bg-no-repeat rounded-2xl">
             <div class="mt-auto w-2/3 md:max-w-lg ps-5 pb-5 md:ps-10 md:pb-10">
                 <h1 class="text-xl md:text-3xl lg:text-5xl text-white">
-                    VINDE - when you know, you know
+                    VINDE - if you know, you know
                 </h1>
             </div>
         </div>

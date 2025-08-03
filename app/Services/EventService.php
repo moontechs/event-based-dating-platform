@@ -46,7 +46,8 @@ class EventService
             'category',
             'timeZone',
             'attendances.user' => function ($query) {
-                $query->select('id', 'name', 'full_name', 'photo_path', 'slug');
+                $query->select('id', 'name', 'full_name', 'photo_path', 'relationship_intent', 'slug')
+                    ->active();
             },
         ])->find($eventId);
     }
@@ -91,7 +92,7 @@ class EventService
             if (! $this->canUserCancelAttendance($event, $user)) {
                 return [
                     'success' => false,
-                    'message' => 'You cannot cancel attendance for this event. Events can only be modified up to 2 days after they finish.',
+                    'message' => 'You cannot cancel attendance for this event. Events can only be modified up to 2 days after they finish',
                     'attending' => true,
                 ];
             }
@@ -101,7 +102,7 @@ class EventService
 
             return [
                 'success' => true,
-                'message' => 'Attendance cancelled successfully.',
+                'message' => 'Attendance cancelled successfully',
                 'attending' => false,
                 'attendees_count' => $event->attendances()->count(),
             ];
@@ -110,7 +111,7 @@ class EventService
             if (! $this->canUserMarkAttendance($event, $user)) {
                 return [
                     'success' => false,
-                    'message' => 'You cannot mark attendance for this event. Events can only be modified up to 2 days after they finish.',
+                    'message' => 'You cannot mark attendance for this event. Events can only be modified up to 2 days after they finish',
                     'attending' => false,
                 ];
             }
@@ -120,7 +121,7 @@ class EventService
 
             return [
                 'success' => true,
-                'message' => 'Attendance marked successfully.',
+                'message' => 'Attendance marked successfully',
                 'attending' => true,
                 'attendees_count' => $event->attendances()->count(),
             ];

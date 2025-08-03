@@ -86,7 +86,7 @@ class MagicLinkController extends Controller
 
         if (! $magicLink) {
             return redirect()->route('login')->withErrors([
-                'token' => 'Invalid or expired verification.',
+                'token' => 'Invalid or expired verification',
             ]);
         }
 

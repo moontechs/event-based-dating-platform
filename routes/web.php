@@ -37,17 +37,17 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
+// Events
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/search', [EventController::class, 'search'])->name('events.search');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
 // Authenticated routes (active users only)
 Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function () {
     // Dashboard
     Route::get('/dashboard', function () {
         return redirect()->route('events.index');
     })->name('dashboard');
-
-    // Events
-    Route::get('/events', [EventController::class, 'index'])->name('events.index');
-    Route::get('/events/search', [EventController::class, 'search'])->name('events.search');
-    Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
     // Event Attendance
     Route::post('/events/{event}/attend', [AttendanceController::class, 'toggle'])

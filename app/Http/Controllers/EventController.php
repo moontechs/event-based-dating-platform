@@ -38,24 +38,28 @@ class EventController extends Controller
 
         $acceptedConnectionRequestUserIds = [];
         $pendingConnectionRequestUserIds = [];
+        $eligibleUserIds = [];
 
-        Auth::user()->acceptedConnectionRequests()->get()->each(function (ConnectionRequest $connection) use (&$acceptedConnectionRequestUserIds) {
-            $acceptedConnectionRequestUserIds[] = $connection->receiver_id === Auth::id() ? $connection->sender_id : $connection->receiver_id;
-        });
+        if (Auth::check()) {
+            Auth::user()->acceptedConnectionRequests()->get()->each(function (ConnectionRequest $connection) use (&$acceptedConnectionRequestUserIds) {
+                $acceptedConnectionRequestUserIds[] = $connection->receiver_id === Auth::id() ? $connection->sender_id : $connection->receiver_id;
+            });
 
-        Auth::user()->sentConnectionRequests()->get()->each(function (ConnectionRequest $connection) use (&$pendingConnectionRequestUserIds) {
-            if ($connection->status !== ConnectionStatus::Pending) {
-                return;
-            }
+            Auth::user()->sentConnectionRequests()->get()->each(function (ConnectionRequest $connection) use (&$pendingConnectionRequestUserIds) {
+                if (! $connection->isPending()) {
+                    return;
+                }
 
-            $pendingConnectionRequestUserIds[] = $connection->receiver_id;
-        });
+                $pendingConnectionRequestUserIds[] = $connection->receiver_id;
+            });
 
-        $eligibleUserIds = $this->eventService
-            ->getUsersAttendedSameEventsAsUser(auth()->user())
-            ->whereNotIn('id', $acceptedConnectionRequestUserIds)
-            ->pluck('id')
-            ->toArray();
+            $eligibleUserIds = $this->eventService
+                ->getUsersAttendedSameEventsAsUser(auth()->user())
+                ->whereNotIn('id', $acceptedConnectionRequestUserIds)
+                ->pluck('id')
+                ->toArray();
+        }
+
         $statistics = $this->eventService->getEventStatistics($event);
 
         return view('events.show', compact(

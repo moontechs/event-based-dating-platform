@@ -21,7 +21,7 @@ class EnsureUserActive
             Auth::logout();
 
             return redirect()->route('login')->withErrors([
-                'email' => 'Your account has been restricted. Please contact support.',
+                'email' => 'Your account has been restricted. Please contact support',
             ]);
         }
 

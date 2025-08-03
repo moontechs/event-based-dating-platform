@@ -14,7 +14,10 @@ class EventAttendanceSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::where('status', 'active')->whereNotNull('full_name')->get();
+        $users = User::where('status', 'active')
+            ->whereNotNull('full_name')
+            ->where('name', '!=', 'System')
+            ->get();
         $events = Event::where('is_published', true)->get();
 
         // Generate realistic attendance patterns
