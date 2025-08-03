@@ -1,4 +1,4 @@
 *
 !.gitignore
-!profiles
-!events
+!test-profiles
+!test-events
