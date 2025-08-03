@@ -22,9 +22,10 @@ class MagicLinkController extends Controller
 
         if (config('app.env') === 'local') {
             $userId = $request->get('userId', null);
+            $userSlug = $request->get('userSlug', null);
 
-            if ($userId) {
-                $user = User::find($userId);
+            if ($userId || $userSlug) {
+                $user = $userId ? User::find($userId) : User::where('slug', $userSlug)->first();
 
                 if ($user) {
                     Auth::login($user);

@@ -145,7 +145,7 @@ class ConnectionController extends Controller
             return back()->with('error', 'No connection request found');
         }
 
-        if ($connectionRequest->cancel()) {
+        if ($connectionRequest->reject()) {
             return back()->with('info', "Connection request from {$user->name} rejected.");
         }
 

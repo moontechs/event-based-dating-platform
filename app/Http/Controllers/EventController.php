@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ConnectionStatus;
 use App\Models\ConnectionRequest;
 use App\Models\Event;
 use App\Services\EventService;

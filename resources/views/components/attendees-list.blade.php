@@ -45,7 +45,7 @@
                                 <div class="py-3 border-t border-gray-200 dark:border-neutral-700">
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
-                                            <span class="font-medium text-black dark:text-white">18+ y.o.</span>
+                                            <span class="font-medium text-black dark:text-white">18+</span>
                                         </div>
 
                                         <div class="text-end min-h-[2lh]">

@@ -27,7 +27,7 @@
         <main id="content">
             <!-- Flash Messages -->
             @if(session('success') || session('error') || session('info'))
-                <div class="fixed top-20 right-4 z-50 max-w-md">
+                <div class="fixed top-20 right-4 z-50 max-w-md flash-messages">
                     @if(session('success'))
                         <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 shadow-md">
                             <div class="flex items-center">
@@ -47,7 +47,7 @@
                     @endif
 
                     @if(session('error'))
-                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 shadow-md">
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 shadow-md flash-messages">
                             <div class="flex items-center">
                                 <svg class="h-5 w-5 text-red-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -65,7 +65,7 @@
                     @endif
 
                     @if(session('info'))
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-md">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-md flash-messages">
                             <div class="flex items-center">
                                 <svg class="h-5 w-5 text-blue-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -86,7 +86,7 @@
                 <script>
                     // Auto-hide flash messages after 5 seconds
                     setTimeout(function() {
-                        const flashMessages = document.querySelectorAll('.fixed.top-4.right-4 > div');
+                        const flashMessages = document.querySelectorAll('.flash-messages');
                         flashMessages.forEach(function(message) {
                             message.style.transition = 'opacity 0.5s ease-out';
                             message.style.opacity = '0';
