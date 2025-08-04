@@ -104,7 +104,41 @@
                             </div>
                         </div>
 
-                        <!-- Relationship Intent Card -->
+                        <!-- Age Card -->
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="size-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-500">Age</h3>
+                                    <p class="text-sm text-gray-900 font-medium">{{ $user->age ?? 'Not specified' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gender Card -->
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="size-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="4"></circle>
+                                        <path d="M16 8v5a3 3 0 0 0 6 0v-5a4 4 0 1 0-8 8 3 3 0 0 0 0-6 4 4 0 1 0-8-8v5a3 3 0 0 0 6 0V8"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-500">Gender</h3>
+                                    <p class="text-sm text-gray-900 font-medium">
+                                        {{ $user->gender?->label() ?? 'Not specified' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sexual Preference Card -->
                         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                             <div class="flex items-center gap-3">
                                 <div class="flex-shrink-0">
@@ -113,7 +147,24 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Relationship Intent</h3>
+                                    <h3 class="text-sm font-medium text-gray-500">Sexual Preference</h3>
+                                    <p class="text-sm text-gray-900 font-medium">
+                                        {{ $user->sexual_preference?->label() ?? 'Not specified' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- What are you looking for Card -->
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="size-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-500">What are you looking for?</h3>
                                     <p class="text-sm text-gray-900 font-medium">
                                         {{ $user->relationship_intent?->label() ?? 'Not specified' }}
                                     </p>

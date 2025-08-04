@@ -20,7 +20,10 @@ return new class extends Migration
             $table->string('full_name')->nullable();
             $table->string('whatsapp_number')->nullable();
             $table->string('photo_path')->nullable();
-            $table->enum('relationship_intent', ['dont_know', 'monogamous', 'open_relationship', 'casual_fling'])->nullable();
+            $table->enum('relationship_intent', ['serious_relationship', 'marriage', 'casual_dates', 'dont_know'])->nullable();
+            $table->integer('age')->nullable();
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->enum('sexual_preference', ['heterosexual', 'homosexual', 'bisexual', 'other'])->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->text('status_reason')->nullable();
             $table->boolean('terms_accepted')->default(false);

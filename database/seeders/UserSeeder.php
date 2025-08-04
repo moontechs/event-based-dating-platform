@@ -68,10 +68,13 @@ class UserSeeder extends Seeder
                 'whatsapp_number' => null,
                 'photo_path' => null,
                 'relationship_intent' => null,
+                'age' => null,
+                'gender' => null,
+                'sexual_preference' => null,
             ]);
 
         // Create users with specific relationship intents for testing
-        foreach (['monogamous', 'open_relationship', 'casual_fling'] as $intent) {
+        foreach (['serious_relationship', 'marriage', 'casual_dates'] as $intent) {
             User::factory()
                 ->count(8)
                 ->create([

@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Enums\ConnectionStatus;
+use App\Enums\Gender;
 use App\Enums\RelationshipIntent;
+use App\Enums\SexualPreference;
 use App\Enums\UserStatus;
 use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -35,6 +37,9 @@ class User extends Authenticatable
         'whatsapp_number',
         'photo_path',
         'relationship_intent',
+        'age',
+        'gender',
+        'sexual_preference',
         'status',
         'status_reason',
         'terms_accepted',
@@ -64,6 +69,8 @@ class User extends Authenticatable
             'terms_accepted' => 'boolean',
             'status' => UserStatus::class,
             'relationship_intent' => RelationshipIntent::class,
+            'gender' => Gender::class,
+            'sexual_preference' => SexualPreference::class,
         ];
     }
 
@@ -118,6 +125,9 @@ class User extends Authenticatable
             && ! empty($this->photo_path)
             && ! empty($this->whatsapp_number)
             && $this->relationship_intent !== null
+            && $this->age !== null
+            && $this->gender !== null
+            && $this->sexual_preference !== null
             && $this->terms_accepted === true;
     }
 

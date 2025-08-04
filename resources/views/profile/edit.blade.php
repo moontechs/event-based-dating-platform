@@ -99,14 +99,67 @@
                         @enderror
                     </div>
 
-                    <!-- Relationship Intent -->
+                    <!-- Age -->
+                    <div>
+                        <label for="age" class="block text-sm font-medium text-gray-700 mb-2">
+                            Age *
+                        </label>
+                        <input id="age" name="age" type="number" min="18" max="100" required
+                               value="{{ old('age', $user->age) }}"
+                               class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        @error('age')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Gender -->
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">
+                            Gender *
+                        </label>
+                        <select id="gender" name="gender" required
+                                class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <option value="">Select your gender</option>
+                            @foreach($genders as $gender)
+                                <option value="{{ $gender->value }}"
+                                        {{ old('gender', $user->gender?->value) === $gender->value ? 'selected' : '' }}>
+                                    {{ $gender->label() }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('gender')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Sexual Preference -->
+                    <div>
+                        <label for="sexual_preference" class="block text-sm font-medium text-gray-700 mb-2">
+                            Sexual Preference *
+                        </label>
+                        <select id="sexual_preference" name="sexual_preference" required
+                                class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <option value="">Select your preference</option>
+                            @foreach($sexualPreferences as $preference)
+                                <option value="{{ $preference->value }}"
+                                        {{ old('sexual_preference', $user->sexual_preference?->value) === $preference->value ? 'selected' : '' }}>
+                                    {{ $preference->label() }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('sexual_preference')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- What are you looking for -->
                     <div>
                         <label for="relationship_intent" class="block text-sm font-medium text-gray-700 mb-2">
-                            Relationship Intent *
+                            What are you looking for? *
                         </label>
                         <select id="relationship_intent" name="relationship_intent" required
                                 class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-                            <option value="">Select your intent</option>
+                            <option value="">Select what you're looking for</option>
                             @foreach($relationshipIntents as $intent)
                                 <option value="{{ $intent->value }}"
                                         {{ old('relationship_intent', $user->relationship_intent?->value) === $intent->value ? 'selected' : '' }}>

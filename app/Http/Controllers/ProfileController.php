@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Gender;
 use App\Enums\RelationshipIntent;
+use App\Enums\SexualPreference;
 use App\Models\User;
 use App\Services\ProfileService;
 use Illuminate\Http\RedirectResponse;
@@ -39,6 +41,8 @@ class ProfileController extends Controller
         return view('profile.edit', [
             'user' => $user,
             'relationshipIntents' => RelationshipIntent::cases(),
+            'genders' => Gender::cases(),
+            'sexualPreferences' => SexualPreference::cases(),
         ]);
     }
 
@@ -51,6 +55,9 @@ class ProfileController extends Controller
             'photo' => ['nullable', 'image', 'max:10240'],
             'full_name' => ['required', 'string', 'max:255'],
             'whatsapp_number' => ['required', 'string', 'max:20'],
+            'age' => ['required', 'integer', 'min:18', 'max:100'],
+            'gender' => ['required', Rule::enum(Gender::class)],
+            'sexual_preference' => ['required', Rule::enum(SexualPreference::class)],
             'relationship_intent' => ['required', Rule::enum(RelationshipIntent::class)],
         ]);
 

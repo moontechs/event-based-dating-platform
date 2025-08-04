@@ -4,18 +4,18 @@ namespace App\Enums;
 
 enum RelationshipIntent: string
 {
+    case SeriousRelationship = 'serious_relationship';
+    case Marriage = 'marriage';
+    case CasualDates = 'casual_dates';
     case DontKnow = 'dont_know';
-    case Monogamous = 'monogamous';
-    case OpenRelationship = 'open_relationship';
-    case CasualFling = 'casual_fling';
 
     public function label(): string
     {
         return match ($this) {
-            self::DontKnow => "Don't know",
-            self::Monogamous => 'Monogamous relationships',
-            self::OpenRelationship => 'Open relationship',
-            self::CasualFling => 'Casual fling',
+            self::SeriousRelationship => 'Serious relationship',
+            self::Marriage => 'Marriage',
+            self::CasualDates => 'Casual dates',
+            self::DontKnow => 'I do not know',
         };
     }
 }
