@@ -16,7 +16,7 @@ namespace App\Models{
  * @property int $id
  * @property int $sender_id
  * @property int $receiver_id
- * @property string $status
+ * @property \App\Enums\ConnectionStatus $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $receiver
@@ -45,10 +45,9 @@ namespace App\Models{
  * @property int $id
  * @property string $title
  * @property string $description
- * @property string $extended_description
  * @property string|null $image_path
  * @property \Illuminate\Support\Carbon $date_time
- * @property string $timezone
+ * @property int $timezone_id
  * @property int $category_id
  * @property string $city
  * @property string $country
@@ -58,8 +57,15 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventAttendance> $attendances
  * @property-read int|null $attendances_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $attendees
- * @property-read int|null $attendees_count
+ * @property-read int $attendees_count
  * @property-read \App\Models\EventCategory $category
+ * @property-read string|null $formatted_timezone
+ * @property-read \Carbon\Carbon $local_date_time
+ * @property-read string $timezone_offset
+ * @property-read \App\Models\TimeZone $timeZone
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event byCategory($categoryId)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event byDateRange($startDate = null, $endDate = null)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event byLocation($city = null, $country = null)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event draft()
  * @method static \Database\Factories\EventFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event future()
@@ -68,17 +74,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event past()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event published()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event search($search)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereCity($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereCountry($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereDateTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereExtendedDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereImagePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereIsPublished($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereTimezone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereTimezoneId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Event whereUpdatedAt($value)
  * @mixin \Eloquent
@@ -162,6 +168,32 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
+ * @property int $user_id
+ * @property string $image_path
+ * @property bool $is_main
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\ProfileImageFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage main()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage whereImagePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage whereIsMain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage whereUserId($value)
+ * @mixin \Eloquent
+ */
+	#[\AllowDynamicProperties]
+	class IdeHelperProfileImage {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
  * @property string $name
  * @property string $display_name
  * @property string $utc_offset
@@ -189,7 +221,7 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
- * @property string $name
+ * @property string|null $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
@@ -197,17 +229,25 @@ namespace App\Models{
  * @property string|null $whatsapp_number
  * @property string|null $photo_path
  * @property \App\Enums\RelationshipIntent|null $relationship_intent
+ * @property int|null $age
+ * @property \App\Enums\Gender|null $gender
+ * @property \App\Enums\SexualPreference|null $sexual_preference
  * @property \App\Enums\UserStatus $status
  * @property string|null $status_reason
  * @property bool $terms_accepted
- * @property string|null $slug
+ * @property string $slug
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventAttendance> $attendances
- * @property-read int|null $attendances_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ConnectionRequest> $acceptedConnectionRequests
+ * @property-read int|null $accepted_connection_requests_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\EventAttendance> $eventAttendances
+ * @property-read int|null $event_attendances_count
+ * @property-read \App\Models\ProfileImage|null $mainProfileImage
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProfileImage> $profileImages
+ * @property-read int|null $profile_images_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ConnectionRequest> $receivedConnectionRequests
  * @property-read int|null $received_connection_requests_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ConnectionRequest> $sentConnectionRequests
@@ -218,16 +258,19 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAge($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereFullName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereGender($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhotoPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRelationshipIntent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereSexualPreference($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereStatusReason($value)

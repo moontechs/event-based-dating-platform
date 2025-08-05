@@ -7,7 +7,6 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MagicLinkController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileSetupController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -24,23 +23,15 @@ Route::get('/verify', [MagicLinkController::class, 'showVerificationForm'])->nam
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-// Profile setup (for first-time users)
-Route::middleware(['auth', 'user.active'])->group(function () {
-    Route::get('/profile/setup', [ProfileSetupController::class, 'show'])->name('profile.setup');
-    Route::post('/profile/setup', [ProfileSetupController::class, 'store'])->name('profile.setup.store');
-});
-
-// Routes for inactive users (profile access only)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
-
 // Events
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/search', [EventController::class, 'search'])->name('events.search');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
+// Profile setup (for first-time users)
+Route::middleware(['auth', 'user.active'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+});
 
 // Authenticated routes (active users only)
 Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function () {

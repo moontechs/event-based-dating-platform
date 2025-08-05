@@ -1,7 +1,7 @@
 <div class="relative">
     <div class="aspect-4/4 overflow-hidden rounded-2xl">
-        @if($connectionUser->photo_path)
-            <img class="size-full object-cover rounded-2xl" src="{{ Storage::url($connectionUser->photo_path) }}" alt="{{ $connectionUser->name }}">
+        @if($connectionUser->getMainProfileImagePath())
+            <img class="size-full object-cover rounded-2xl" src="{{ Storage::url($connectionUser->getMainProfileImagePath()) }}" alt="{{ $connectionUser->name }}">
         @else
             <div class="size-full bg-gray-300 rounded-2xl flex items-center justify-center dark:bg-neutral-700">
                 <svg class="w-16 h-16 text-gray-500 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

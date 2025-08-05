@@ -17,7 +17,7 @@
                             <div class="aspect-4/4 overflow-hidden rounded-2xl">
                                 <img class="size-full object-cover rounded-2xl"
                                      loading="lazy"
-                                     src="{{ Storage::url($attendance->user->photo_path) }}"
+                                     src="{{ Storage::url($attendance->user->getMainProfileImagePath()) }}"
                                      alt="{{ $attendance->user->name }}"
                                 >
                             </div>

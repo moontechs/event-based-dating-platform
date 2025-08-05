@@ -46,7 +46,7 @@ class EventService
             'category',
             'timeZone',
             'attendances.user' => function ($query) {
-                $query->select('id', 'name', 'full_name', 'photo_path', 'relationship_intent', 'slug')
+                $query->select('id', 'name', 'full_name', 'relationship_intent', 'slug')
                     ->active();
             },
         ])->find($eventId);

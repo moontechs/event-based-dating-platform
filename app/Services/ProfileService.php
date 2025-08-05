@@ -30,13 +30,6 @@ class ProfileService
         return $path;
     }
 
-    public function deletePhoto(User $user): void
-    {
-        if ($user->photo_path) {
-            Storage::disk('public')->delete($user->photo_path);
-        }
-    }
-
     public function hasFullProfileAccess(User $viewer, User $profileOwner): bool
     {
         if ($viewer->id === $profileOwner->id) {

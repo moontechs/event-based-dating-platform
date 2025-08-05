@@ -2,7 +2,7 @@
 
 @section('content')
 @php use Illuminate\Support\Facades\Storage; @endphp
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen">
     <!-- Hero -->
     <div class="px-4 sm:px-6 lg:px-8 ">
         <div class="h-120 md:h-[40dvh] flex flex-col bg-cover bg-center bg-no-repeat rounded-2xl"

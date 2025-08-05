@@ -4,7 +4,7 @@
 
 @section('content')
     @php use Illuminate\Support\Facades\Storage; @endphp
-    <div class="min-h-screen bg-gray-50 dark:bg-neutral-900">
+    <div class="min-h-screen dark:bg-neutral-900">
         <!-- People List -->
         <div class="max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-24 mx-auto">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">

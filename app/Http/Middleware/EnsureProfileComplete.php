@@ -18,7 +18,7 @@ class EnsureProfileComplete
         $user = Auth::user();
 
         if (! $this->isProfileComplete($user)) {
-            return redirect()->route('profile.setup');
+            return redirect()->route('profile.edit');
         }
 
         return $next($request);

@@ -48,7 +48,6 @@ class LoginController extends Controller
             'email_verified_at' => now(),
             'full_name' => null,
             'whatsapp_number' => null,
-            'photo_path' => null,
             'relationship_intent' => null,
             'status' => 'active',
             'status_reason' => null,

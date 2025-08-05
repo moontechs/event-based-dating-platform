@@ -18,8 +18,9 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
-<body class="dark:bg-neutral-900">
+<body class="">
     <div class="min-h-screen">
         <!-- Navigation -->
         @include('components.navigation')
@@ -100,6 +101,9 @@
 
             @yield('content')
         </main>
+
+        @include('components.footer')
     </div>
+    @livewireScripts
 </body>
 </html>

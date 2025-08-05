@@ -2,7 +2,7 @@
 
 @section('content')
 @php use Illuminate\Support\Facades\Storage; @endphp
-<div class="min-h-screen bg-gray-50 py-8">
+<div class="min-h-screen py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">Browse Users</h1>
@@ -15,9 +15,9 @@
                     <div class="p-6">
                         <!-- Profile Photo -->
                         <div class="flex-shrink-0 mb-4">
-                            @if($user->photo_path)
-                                <img class="h-16 w-16 rounded-full object-cover mx-auto" 
-                                     src="{{ Storage::url($user->photo_path) }}" 
+                            @if($user->getMainProfileImagePath())
+                                <img class="h-16 w-16 rounded-full object-cover mx-auto"
+                                     src="{{ Storage::url($user->getMainProfileImagePath()) }}"
                                      alt="{{ $user->full_name ?? $user->name }}">
                             @else
                                 <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center mx-auto">
@@ -38,9 +38,9 @@
                                     {{ $user->relationship_intent->label() }}
                                 </p>
                             @endif
-                            
+
                             <!-- View Profile Button using slug -->
-                            <a href="{{ route('users.show', $user->slug) }}" 
+                            <a href="{{ route('users.show', $user->slug) }}"
                                class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 py-2 px-4 cursor-pointer">
                                 View Profile
                             </a>

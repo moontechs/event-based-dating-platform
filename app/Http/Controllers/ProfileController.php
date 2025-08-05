@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Gender;
-use App\Enums\RelationshipIntent;
-use App\Enums\SexualPreference;
 use App\Models\User;
 use App\Services\ProfileService;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -23,6 +17,7 @@ class ProfileController extends Controller
         /** @var User $currentUser */
         $currentUser = auth()->user();
         $profileUser = $user ?? $currentUser;
+        $profileUser->load('profileImages');
 
         $hasFullAccess = $this->profileService->hasFullProfileAccess($currentUser, $profileUser);
 
@@ -36,44 +31,6 @@ class ProfileController extends Controller
 
     public function edit(): View
     {
-        $user = auth()->user();
-
-        return view('profile.edit', [
-            'user' => $user,
-            'relationshipIntents' => RelationshipIntent::cases(),
-            'genders' => Gender::cases(),
-            'sexualPreferences' => SexualPreference::cases(),
-        ]);
-    }
-
-    public function update(Request $request): RedirectResponse
-    {
-        /** @var User $user */
-        $user = auth()->user();
-
-        $validated = $request->validate([
-            'photo' => ['nullable', 'image', 'max:10240'],
-            'full_name' => ['required', 'string', 'max:255'],
-            'whatsapp_number' => ['required', 'string', 'max:20'],
-            'age' => ['required', 'integer', 'min:18', 'max:100'],
-            'gender' => ['required', Rule::enum(Gender::class)],
-            'sexual_preference' => ['required', Rule::enum(SexualPreference::class)],
-            'relationship_intent' => ['required', Rule::enum(RelationshipIntent::class)],
-        ]);
-
-        if ($request->hasFile('photo')) {
-            if ($user->photo_path) {
-                $this->profileService->deletePhoto($user);
-            }
-
-            $photoPath = $this->profileService->handlePhotoUpload($request->file('photo'));
-            $validated['photo_path'] = $photoPath;
-        }
-
-        unset($validated['photo']);
-
-        $user->update($validated);
-
-        return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
+        return view('profile.edit');
     }
 }

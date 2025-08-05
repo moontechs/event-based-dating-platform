@@ -11,6 +11,7 @@ use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -35,7 +36,6 @@ class User extends Authenticatable
         'password',
         'full_name',
         'whatsapp_number',
-        'photo_path',
         'relationship_intent',
         'age',
         'gender',
@@ -99,6 +99,16 @@ class User extends Authenticatable
         return $this->hasMany(ConnectionRequest::class, 'receiver_id');
     }
 
+    public function profileImages(): HasMany
+    {
+        return $this->hasMany(ProfileImage::class);
+    }
+
+    public function mainProfileImage(): HasOne
+    {
+        return $this->hasOne(ProfileImage::class)->where('is_main', true);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', UserStatus::Active);
@@ -122,13 +132,18 @@ class User extends Authenticatable
     public function hasCompletedProfile(): bool
     {
         return ! empty($this->full_name)
-            && ! empty($this->photo_path)
+            && $this->profileImages()->exists()
             && ! empty($this->whatsapp_number)
             && $this->relationship_intent !== null
             && $this->age !== null
             && $this->gender !== null
             && $this->sexual_preference !== null
             && $this->terms_accepted === true;
+    }
+
+    public function getMainProfileImagePath(): ?string
+    {
+        return $this->mainProfileImage?->image_path;
     }
 
     public static function generateSecurePassword(): string

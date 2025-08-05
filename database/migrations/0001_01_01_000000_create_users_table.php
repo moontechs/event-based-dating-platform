@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('password');
             $table->string('full_name')->nullable();
             $table->string('whatsapp_number')->nullable();
-            $table->string('photo_path')->nullable();
             $table->enum('relationship_intent', ['serious_relationship', 'marriage', 'casual_dates', 'dont_know'])->nullable();
             $table->integer('age')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
