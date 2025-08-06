@@ -1,6 +1,6 @@
 @php use Illuminate\Support\Facades\Storage; @endphp
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    @if($this->attendances->count() > 0)
+    @if($this->attendances->count() > 0 && \Illuminate\Support\Facades\Auth::user()->hasCompletedProfile())
         <div class="mb-6 sm:mb-10 max-w-2xl text-center mx-auto">
             <h1 class="font-medium text-black text-3xl sm:text-4xl dark:text-white">
                 Attendees
@@ -73,11 +73,20 @@
             </div>
         </div>
     @else
+        @if(! \Illuminate\Support\Facades\Auth::user()->hasCompletedProfile())
         <div class="group flex flex-col">
             <div class="text-center">
-                <h3 class="font-medium text-black dark:text-white mb-2">No Attendees Yet</h3>
-                <p class="text-sm text-black dark:text-white">Be the first to mark attendance for this event!</p>
+                <h3 class="font-medium text-black dark:text-white mb-2">Complete your profile</h3>
+                <p class="text-sm text-black dark:text-white">You will be able to see attendees and match with them</p>
             </div>
         </div>
+        @elseif($this->attendances->count() === 0)
+            <div class="group flex flex-col">
+                <div class="text-center">
+                    <h3 class="font-medium text-black dark:text-white mb-2">No Attendees Yet</h3>
+                    <p class="text-sm text-black dark:text-white">Be the first to mark attendance for this event!</p>
+                </div>
+            </div>
+        @endif
     @endif
 </div>

@@ -21,7 +21,7 @@ class LoginController extends Controller
         Auth::login($user, true);
 
         if (! $this->isProfileComplete($user)) {
-            return redirect()->route('profile.setup');
+            return redirect()->route('profile.edit');
         }
 
         return redirect()->intended(route('dashboard'));

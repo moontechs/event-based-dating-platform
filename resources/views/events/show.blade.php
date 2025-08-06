@@ -97,7 +97,9 @@
                 </div>
             </div>
 
-            @livewire('toggle-attendance', ['event' => $event, 'statistics' => $statistics])
+            @if(\Illuminate\Support\Facades\Auth::user()->hasCompletedProfile())
+                @livewire('toggle-attendance', ['event' => $event, 'statistics' => $statistics])
+            @endif
         </div>
     </div>
 
