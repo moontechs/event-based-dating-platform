@@ -3,7 +3,7 @@
     @include('components.matched-connection', ['connectionUser' => $connectionUser])
 
     <div class="mt-auto flex gap-2">
-        @include('components.reject-connection', ['connectionUser' => $connectionUser])
+        @livewire('disconnect-match-button', ['connectionUser' => $connectionUser], key('disconnect-'.$connectionUser->slug))
     </div>
 </div>
 <!-- End Card -->

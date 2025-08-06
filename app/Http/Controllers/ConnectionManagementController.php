@@ -43,17 +43,6 @@ class ConnectionManagementController extends Controller
 
     public function matches(): View
     {
-        $user = Auth::user();
-
-        $matches = ConnectionRequest::with(['sender', 'receiver'])
-            ->where(function ($query) use ($user) {
-                $query->where('sender_id', $user->id)
-                    ->orWhere('receiver_id', $user->id);
-            })
-            ->where('status', ConnectionStatus::Accepted)
-            ->orderBy('updated_at', 'desc')
-            ->get();
-
-        return view('connections.matches', compact('matches'));
+        return view('connections.matches');
     }
 }

@@ -177,7 +177,7 @@ class ConnectionRequest extends Model
     }
 
     /**
-     * Disconnect users (cancel an accepted connection)
+     * Disconnect users (reject an accepted connection)
      */
     public function disconnect(): bool
     {
@@ -185,6 +185,6 @@ class ConnectionRequest extends Model
             return false;
         }
 
-        return $this->cancel();
+        return $this->reject();
     }
 }

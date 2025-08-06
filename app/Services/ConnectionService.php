@@ -174,6 +174,37 @@ class ConnectionService
         ];
     }
 
+    public function disconnectMatch(User $currentUser, User $otherUser): array
+    {
+        $connectionRequest = ConnectionRequest::where(function ($query) use ($currentUser, $otherUser) {
+            $query->where('sender_id', $currentUser->id)
+                ->where('receiver_id', $otherUser->id);
+        })->orWhere(function ($query) use ($currentUser, $otherUser) {
+            $query->where('sender_id', $otherUser->id)
+                ->where('receiver_id', $currentUser->id);
+        })->where('status', ConnectionStatus::Accepted)
+            ->first();
+
+        if (! $connectionRequest) {
+            return [
+                'success' => false,
+                'message' => 'No connection found between you and this user',
+            ];
+        }
+
+        if ($connectionRequest->disconnect()) {
+            return [
+                'success' => true,
+                'message' => "You have disconnected from {$otherUser->name}.",
+            ];
+        }
+
+        return [
+            'success' => false,
+            'message' => 'Unable to disconnect from this user',
+        ];
+    }
+
     public function getConnectionRequestData(User $user): array
     {
         $acceptedConnectionRequestUserIds = [];
