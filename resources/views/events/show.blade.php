@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <livewire:toggle-attendance :event="$event" :statistics="$statistics" />
+            @livewire('toggle-attendance', ['event' => $event, 'statistics' => $statistics])
         </div>
     </div>
 
@@ -106,7 +106,7 @@
     </div>
 
     @auth
-        @include('components.attendees-list', ['attendances' => $event->attendances])
+        @livewire('attendees-list', ['event' => $event])
     @endif
 </div>
 

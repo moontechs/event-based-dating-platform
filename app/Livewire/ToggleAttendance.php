@@ -49,6 +49,8 @@ class ToggleAttendance extends Component
             $this->userAttending = $this->event->isUserAttending();
             $this->canMarkAttendance = $this->event->canMarkAttendance();
 
+            $this->dispatch('attendanceToggled');
+
             Toaster::success($result['message']);
         } else {
             Toaster::error($result['message']);

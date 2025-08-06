@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\ConnectionManagementController;
 use App\Http\Controllers\EventController;
@@ -48,8 +47,6 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
         Route::get('/sent', [ConnectionManagementController::class, 'sent'])->name('sent');
         Route::get('/matches', [ConnectionManagementController::class, 'matches'])->name('matches');
 
-        Route::post('/request/{user:slug}', [ConnectionController::class, 'sendRequest'])->name('request');
-        Route::post('/cancel/{user:slug}', [ConnectionController::class, 'cancelRequest'])->name('cancel');
         Route::post('/accept/{user:slug}', [ConnectionController::class, 'acceptRequest'])->name('accept');
         Route::post('/reject/{user:slug}', [ConnectionController::class, 'rejectRequest'])->name('reject');
     });
