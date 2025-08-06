@@ -20,7 +20,7 @@
     <!-- End Hero -->
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-24 mx-auto">
+        <div class="max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-12 mx-auto">
             <!-- Event Details List -->
             <div class="mb-2 mt-4 text-sm">
                 <div class="flex flex-col">
