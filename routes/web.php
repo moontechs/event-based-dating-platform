@@ -40,14 +40,6 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
         return redirect()->route('events.index');
     })->name('dashboard');
 
-    // Event Attendance
-    Route::post('/events/{event}/attend', [AttendanceController::class, 'toggle'])
-        ->name('events.attend')
-        ->middleware('can.mark.attendance');
-
-    // Profile management (duplicated routes for active users)
-    // These routes are handled by the middleware group above
-
     // Connection system
     Route::prefix('connections')->name('connections.')->group(function () {
         // Connection management pages
