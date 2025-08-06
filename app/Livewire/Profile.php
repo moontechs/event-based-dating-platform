@@ -6,11 +6,12 @@ use App\Enums\Gender;
 use App\Enums\RelationshipIntent;
 use App\Enums\SexualPreference;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 
 class Profile extends Component
 {
-    // Profile form properties
     public $full_name;
 
     public $email;
@@ -25,6 +26,8 @@ class Profile extends Component
 
     public $relationship_intent;
 
+    public $terms_accepted;
+
     protected $rules = [
         'full_name' => ['required', 'string', 'max:255'],
         'whatsapp_number' => ['required', 'string', 'max:20'],
@@ -32,6 +35,7 @@ class Profile extends Component
         'gender' => ['required'],
         'sexual_preference' => ['required'],
         'relationship_intent' => ['required'],
+        'terms_accepted' => ['required', 'boolean'],
     ];
 
     public function mount()
@@ -46,6 +50,7 @@ class Profile extends Component
         $this->gender = $user->gender?->value;
         $this->sexual_preference = $user->sexual_preference?->value;
         $this->relationship_intent = $user->relationship_intent?->value;
+        $this->terms_accepted = $user->terms_accepted ?? false;
     }
 
     public function rules()
@@ -57,12 +62,19 @@ class Profile extends Component
             'gender' => ['required', Rule::enum(Gender::class)],
             'sexual_preference' => ['required', Rule::enum(SexualPreference::class)],
             'relationship_intent' => ['required', Rule::enum(RelationshipIntent::class)],
+            'terms_accepted' => ['required', 'boolean'],
         ];
     }
 
     public function save()
     {
-        $this->validate();
+        try {
+            $this->validate();
+        } catch (ValidationException $exception) {
+            Toaster::error('Failed to update profile. Please check the errors and try again.');
+
+            throw $exception;
+        }
 
         $user = auth()->user();
 
@@ -74,11 +86,10 @@ class Profile extends Component
             'gender' => Gender::from($this->gender),
             'sexual_preference' => SexualPreference::from($this->sexual_preference),
             'relationship_intent' => RelationshipIntent::from($this->relationship_intent),
+            'terms_accepted' => $this->terms_accepted,
         ]);
 
-        session()->flash('success', 'Profile updated successfully!');
-
-        // Dispatch event to trigger image component refresh
+        // Dispatch event to trigger image validation and saving
         $this->dispatch('profile-updated');
     }
 

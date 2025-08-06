@@ -9,6 +9,7 @@ export default {
         './vendor/filament/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './vendor/masmerise/livewire-toaster/resources/views/*.blade.php',
         './app/Filament/**/*.php',
         './node_modules/preline/dist/*.js',
         tailwindcss(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class EnsureProfileComplete
         return $next($request);
     }
 
-    private function isProfileComplete($user): bool
+    private function isProfileComplete(User $user): bool
     {
         return $user->hasCompletedProfile();
     }

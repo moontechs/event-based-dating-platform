@@ -27,7 +27,7 @@
                                         Full Name *
                                     </label>
                                     <input id="full_name" wire:model="full_name" type="text" autocomplete="name" required autofocus
-                                           class="py-3 px-4 block w-full border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
+                                           class="py-3 px-4 block w-full border border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
                                     @error('full_name')
                                     <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                                     @enderror
@@ -48,9 +48,9 @@
                                     <label for="whatsapp_number" class="block text-sm font-medium text-black dark:text-white mb-2">
                                         WhatsApp Number *
                                     </label>
-                                    <input id="whatsapp_number" wire:model="whatsapp_number" type="tel" required
+                                    <input id="whatsapp_number" wire:model="whatsapp_number" type="tel"
                                            placeholder="+1234567890"
-                                           class="py-3 px-4 block w-full border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
+                                           class="py-3 px-4 block w-full border border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
                                     <p class="text-xs text-gray-500 dark:text-neutral-400 mt-2">For display purposes only</p>
                                     @error('whatsapp_number')
                                     <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
@@ -63,7 +63,7 @@
                                         Age *
                                     </label>
                                     <input id="age" wire:model="age" type="number" min="18" max="100" required
-                                           class="py-3 px-4 block w-full border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
+                                           class="py-3 px-4 block w-full border border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
                                     @error('age')
                                     <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
                                     @enderror
@@ -75,7 +75,7 @@
                                         Gender *
                                     </label>
                                     <select id="gender" wire:model="gender" required
-                                            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
+                                            class="py-3 px-4 block w-full border border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
                                         <option value="">Select your gender</option>
                                         @foreach($genders as $genderOption)
                                             <option value="{{ $genderOption->value }}">
@@ -94,7 +94,7 @@
                                         Sexual Preference *
                                     </label>
                                     <select id="sexual_preference" wire:model="sexual_preference" required
-                                            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
+                                            class="py-3 px-4 block w-full border border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
                                         <option value="">Select your preference</option>
                                         @foreach($sexualPreferences as $preference)
                                             <option value="{{ $preference->value }}">
@@ -113,7 +113,7 @@
                                         What are you looking for? *
                                     </label>
                                     <select id="relationship_intent" wire:model="relationship_intent" required
-                                            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
+                                            class="py-3 px-4 block w-full border border-gray-200 rounded-xl text-sm focus:border-yellow-400 focus:ring-yellow-400 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white dark:focus:border-yellow-400">
                                         <option value="">Select what you're looking for</option>
                                         @foreach($relationshipIntents as $intent)
                                             <option value="{{ $intent->value }}">
@@ -126,15 +126,25 @@
                                     @enderror
                                 </div>
 
-                                <!-- Success Message -->
-                                @if(session()->has('success'))
-                                    <div class="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-xl">
-                                        {{ session('success') }}
+                                @if(!$terms_accepted)
+                                    <!-- Terms and Conditions -->
+                                    <div>
+                                        <label class="inline-flex items-center">
+                                            <input type="checkbox" wire:model="terms_accepted" required class="form-checkbox rounded text-yellow-400 focus:ring-yellow-400 mr-2">
+                                            <span class="text-sm text-black dark:text-white">
+                                                I accept the
+                                                <a href="/terms" target="_blank" class="relative inline-block font-medium text-black before:absolute before:bottom-0.5 before:start-0 before:-z-1 before:w-full before:h-1 before:bg-yellow-400 hover:before:bg-black focus:outline-hidden focus:before:bg-black dark:text-white dark:hover:before:bg-white dark:focus:before:bg-white">
+                                                    terms and conditions
+                                                </a> *</span>
+                                        </label>
+                                        @error('terms_accepted')
+                                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 @endif
 
                                 <!-- Action Buttons -->
-                                <div class="flex items-center justify-end gap-x-3 pt-6 border-t border-gray-200 dark:border-neutral-700">
+                                <div class="flex items-center justify-end gap-x-3 pt-6">
                                     <button type="submit"
                                             class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-yellow-400 text-black hover:bg-yellow-500 focus:outline-hidden focus:bg-yellow-500 transition cursor-pointer">
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

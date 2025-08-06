@@ -52,6 +52,16 @@ class UserFactory extends Factory
 
             $selectedImages = Arr::random($availableImages, min($imageCount, count($availableImages)));
 
+            foreach ($selectedImages as $index => $selectedImage) {
+                // copy with random name to avoid conflicts
+                $newImageName = Str::random(40).'.'.pathinfo($selectedImage, PATHINFO_EXTENSION);
+                Storage::disk('public')->copy($selectedImage, 'profile-photos/'.$newImageName);
+                $selectedImages[] = 'profile-photos/'.$newImageName;
+                unset($selectedImages[$index]);
+            }
+
+            $selectedImages = array_values($selectedImages);
+
             // If we need more images than available, repeat some
             while (count($selectedImages) < $imageCount) {
                 $selectedImages[] = Arr::random($availableImages);
