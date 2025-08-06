@@ -3,7 +3,7 @@
     @include('components.pending-connection', ['connectionUser' => $connectionUser])
 
     <div class="mt-auto">
-        @include('components.cancel-connection', ['connectionUser' => $connectionUser])
+        @livewire('connection-request-button', ['user' => $connectionUser], key('connection-'.$connectionUser->slug))
     </div>
 </div>
 <!-- End Card -->
