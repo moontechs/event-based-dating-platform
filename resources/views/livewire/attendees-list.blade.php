@@ -66,7 +66,7 @@
                             </div>
                             <!-- End List -->
 
-                            @livewire('connection-request-button', ['user' => $attendance->user, 'connectionData' => $this->connectionData], key('connection-'.$attendance->user->slug))
+                            @livewire('send-connection-request-buttons', ['user' => $attendance->user, 'connectionData' => $this->connectionData], key('send-connection-request-button-'.$attendance->user->slug))
                         </div>
                     </div>
                 @endforeach

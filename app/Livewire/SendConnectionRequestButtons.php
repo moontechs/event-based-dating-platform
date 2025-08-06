@@ -12,7 +12,7 @@ use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
 
-class ConnectionRequestButton extends Component
+class SendConnectionRequestButtons extends Component
 {
     public User $user;
 
@@ -111,6 +111,6 @@ class ConnectionRequestButton extends Component
 
     public function render()
     {
-        return view('livewire.connection-request-button');
+        return view('livewire.send-connection-request-buttons');
     }
 }
