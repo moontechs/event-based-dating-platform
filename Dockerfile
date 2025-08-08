@@ -1,15 +1,18 @@
 # Multi-stage build for Laravel with FrankenPHP
 FROM node:20-alpine AS node-builder
 
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
 # Copy package files and install dependencies
-COPY package*.json ./
-RUN npm ci --only=production
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile --prod
 
 # Copy source files and build assets
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 # Composer stage
 FROM composer:2 AS composer-builder
