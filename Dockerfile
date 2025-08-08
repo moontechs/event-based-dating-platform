@@ -14,6 +14,22 @@ RUN npm run build
 # Composer stage
 FROM composer:2 AS composer-builder
 
+# Install required PHP extensions for composer dependencies
+RUN apk add --no-cache \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libzip-dev \
+    postgresql-dev \
+    icu-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        gd \
+        pdo_pgsql \
+        pgsql \
+        intl \
+        zip
+
 WORKDIR /app
 
 # Copy composer files
