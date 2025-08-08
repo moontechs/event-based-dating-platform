@@ -149,11 +149,11 @@ ENV APP_ENV=production
 ENV APP_DEBUG=false
 
 # Create OPcache preload file
-RUN { \
+RUN mkdir -p /app/config && { \
     echo '<?php'; \
-    echo 'require_once __DIR__ . "/vendor/autoload.php";'; \
+    echo 'require_once __DIR__ . "/../vendor/autoload.php";'; \
     echo '(function() {'; \
-    echo '    $app = require_once __DIR__ . "/bootstrap/app.php";'; \
+    echo '    $app = require_once __DIR__ . "/../bootstrap/app.php";'; \
     echo '    $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);'; \
     echo '    $app->make(Illuminate\Contracts\Console\Kernel::class);'; \
     echo '})();'; \
