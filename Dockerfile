@@ -8,10 +8,15 @@ WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile
 
-# Copy source files and build assets
+# Copy source files
 COPY . .
+
+# Copy vendor from composer stage (needed for JS imports)
+COPY --from=composer-builder /app/vendor ./vendor
+
+# Build assets
 RUN pnpm run build
 
 # Composer stage
