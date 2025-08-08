@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\ProfileImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -48,14 +49,15 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(function ($user) {
             $imageCount = fake()->numberBetween(2, 4);
-            $availableImages = Storage::disk('public')->files('test-profiles');
+            $availableImages = File::allFiles(app_path('../example/test-profiles'));
 
             $selectedImages = Arr::random($availableImages, min($imageCount, count($availableImages)));
 
             foreach ($selectedImages as $index => $selectedImage) {
                 // copy with random name to avoid conflicts
+                $selectedImage = $selectedImage->getPathname();
                 $newImageName = Str::random(40).'.'.pathinfo($selectedImage, PATHINFO_EXTENSION);
-                Storage::disk('public')->copy($selectedImage, 'profile-photos/'.$newImageName);
+                File::copy($selectedImage, Storage::disk('public')->path('profile-photos/'.$newImageName));
                 $selectedImages[] = 'profile-photos/'.$newImageName;
                 unset($selectedImages[$index]);
             }

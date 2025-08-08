@@ -96,9 +96,19 @@
                     </div>
                 </div>
             </div>
-
-            @if(\Illuminate\Support\Facades\Auth::user()->hasCompletedProfile())
-                @livewire('toggle-attendance', ['event' => $event, 'statistics' => $statistics])
+            @auth
+                @if(\Illuminate\Support\Facades\Auth::user()->hasCompletedProfile())
+                    @livewire('toggle-attendance', ['event' => $event, 'statistics' => $statistics])
+                @endif
+            @else
+                <div class="text-center">
+                    <h3 class="font-medium text-black dark:text-white mb-2">Login Required</h3>
+                    <p class="text-sm text-black dark:text-white mb-4">You need to log in to mark attendance for this event.</p>
+                    <a href="{{ route('login') }}"
+                       class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-transparent bg-yellow-400 text-black hover:bg-yellow-500 focus:outline-hidden focus:bg-yellow-500 transition disabled:opacity-50 disabled:pointer-events-none cursor-pointer">
+                        Login to Continue
+                    </a>
+                </div>
             @endif
         </div>
     </div>

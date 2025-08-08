@@ -4,7 +4,9 @@ namespace Database\Factories;
 
 use App\Models\TimeZone;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
@@ -27,12 +29,16 @@ class EventFactory extends Factory
 
         $cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'];
         $countries = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Japan', 'Brazil'];
-        $eventImages = Storage::disk('public')->files('test-events');
+        $eventImages = File::allFiles(app_path('../example/test-events'));
+
+        $selectedImage = $eventImages[array_rand($eventImages)]->getPathname();
+        $newImageName = Str::random(40).'.'.pathinfo($selectedImage, PATHINFO_EXTENSION);
+        File::copy($selectedImage, Storage::disk('public')->path('event-photos/'.$newImageName));
 
         return [
             'title' => fake()->randomElement($eventTypes),
             'description' => fake()->randomHtml(10),
-            'image_path' => fake()->randomElement($eventImages),
+            'image_path' => 'event-photos/'.$newImageName,
             'date_time' => fake()->dateTimeBetween('-1 month', '+3 months'),
             'timezone_id' => fake()->randomElement(TimeZone::all())->id,
             'category_id' => fake()->numberBetween(1, 10),
