@@ -89,7 +89,7 @@ RUN install-php-extensions \
 # Configure PHP for production
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Configure OPcache for production
+# Configure OPcache for production (without preload during build)
 RUN { \
     echo 'opcache.enable=1'; \
     echo 'opcache.enable_cli=1'; \
@@ -104,8 +104,6 @@ RUN { \
     echo 'opcache.fast_shutdown=1'; \
     echo 'opcache.enable_file_override=1'; \
     echo 'opcache.optimization_level=0xffffffff'; \
-    echo 'opcache.preload=/app/config/preload.php'; \
-    echo 'opcache.preload_user=www-data'; \
 } > /usr/local/etc/php/conf.d/opcache.ini
 
 # Additional production PHP optimizations
@@ -148,7 +146,13 @@ ENV FRANKENPHP_CONFIG="worker ./public/index.php"
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-# Create OPcache preload file
+# Optimize Laravel for production
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && php artisan event:cache
+
+# Create OPcache preload file and enable preloading
 RUN mkdir -p /app/config && { \
     echo '<?php'; \
     echo 'require_once __DIR__ . "/../vendor/autoload.php";'; \
@@ -157,13 +161,11 @@ RUN mkdir -p /app/config && { \
     echo '    $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);'; \
     echo '    $app->make(Illuminate\Contracts\Console\Kernel::class);'; \
     echo '})();'; \
-} > /app/config/preload.php
-
-# Optimize Laravel for production
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan event:cache
+} > /app/config/preload.php \
+&& { \
+    echo 'opcache.preload=/app/config/preload.php'; \
+    echo 'opcache.preload_user=www-data'; \
+} >> /usr/local/etc/php/conf.d/opcache.ini
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
