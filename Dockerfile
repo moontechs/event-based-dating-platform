@@ -11,13 +11,17 @@ RUN apk add --no-cache \
     libzip-dev \
     postgresql-dev \
     icu-dev \
+    autoconf \
+    build-base \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         gd \
         pdo_pgsql \
         pgsql \
         intl \
-        zip
+        zip \
+    && pecl install ast \
+    && docker-php-ext-enable ast
 
 WORKDIR /app
 
