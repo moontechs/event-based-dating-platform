@@ -20,7 +20,7 @@ Route::get('/magic-link/verify', [MagicLinkController::class, 'verify'])->name('
 Route::post('/magic-link/verify', [MagicLinkController::class, 'verify'])->name('magic-link.verify.post');
 Route::get('/verify', [MagicLinkController::class, 'showVerificationForm'])->name('verify.form');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+// Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Events
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
