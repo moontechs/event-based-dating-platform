@@ -172,7 +172,7 @@ RUN mkdir -p /app/config && { \
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost/health || exit 1
+    CMD curl -f http://localhost/up || exit 1
 
 # Expose port
 EXPOSE 80 443
