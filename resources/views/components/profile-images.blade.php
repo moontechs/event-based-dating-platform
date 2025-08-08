@@ -17,14 +17,14 @@
     </div>
 
     <div class="grid md:grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 lg:gap-12">
-        @if($hasFullAccess && $user->profileImages->count() > 1)
+        @if($user->profileImages->count() > 1)
             @foreach($user->profileImages->where('is_main', false)->take(6) as $image)
                 <div class="group flex flex-col">
                     <div class="relative">
                         <div class="aspect-4/4 overflow-hidden rounded-2xl">
                             <img class="size-full object-cover rounded-2xl" loading="lazy"
                                  src="{{ Storage::url($image->image_path) }}"
-                                 alt="{{ $user->full_name }}">
+                                 alt="{{ $user->name }}">
                         </div>
                         <div class="pt-4">
                             <h3 class="font-medium md:text-lg text-black dark:text-white"></h3>

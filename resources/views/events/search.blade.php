@@ -247,7 +247,7 @@
 
                 <!-- Pagination -->
                 <div class="flex justify-center">
-                    {{ $events->appends(request()->query())->links() }}
+                    @include('components.simple-pagination', ['paginator' => $events->appends(request()->query())])
                 </div>
             @else
                 <!-- No Results -->

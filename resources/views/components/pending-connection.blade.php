@@ -49,7 +49,7 @@
                 </div>
                 <div class="text-end">
                     <span class="text-black dark:text-white">
-                        18+
+                        {{ $connectionUser->age }}
                     </span>
                 </div>
             </div>

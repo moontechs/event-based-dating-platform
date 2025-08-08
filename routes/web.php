@@ -51,15 +51,5 @@ Route::middleware(['auth', 'user.active', 'profile.complete'])->group(function (
         Route::post('/reject/{user:slug}', [ConnectionController::class, 'rejectRequest'])->name('reject');
     });
 
-    // User profiles (view other users)
-    Route::get('/users', function () {
-        $users = \App\Models\User::active()
-            ->where('id', '!=', auth()->id())
-            ->whereNotNull('slug')
-            ->get();
-
-        return view('users.index', compact('users'));
-    })->name('users.index');
-
     Route::get('/users/{user:slug}', [ProfileController::class, 'show'])->name('users.show');
 });

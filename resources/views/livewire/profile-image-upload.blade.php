@@ -58,9 +58,10 @@
                                 </div>
 
                                 <!-- Action Buttons -->
-                                <div class="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                <div class="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center opacity-100">
                                     <div class="flex gap-2">
                                         @if(!$image->is_main && $this->mainImageId != $image->id)
+                                            <!-- Set Main Button -->
                                             <button type="button" wire:click="setMainImage({{ $image->id }})"
                                                     class="size-8 flex justify-center items-center bg-yellow-400 text-black rounded-full hover:bg-yellow-500 focus:outline-hidden focus:bg-yellow-500 transition cursor-pointer"
                                                     title="Set as main">
@@ -69,6 +70,7 @@
                                                 </svg>
                                             </button>
                                         @endif
+                                        <!-- Remove Button -->
                                         <button type="button" wire:click="removeExistingImage({{ $image->id }})"
                                                 class="size-8 flex justify-center items-center bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-hidden focus:bg-red-600 transition cursor-pointer"
                                                 title="Remove photo">

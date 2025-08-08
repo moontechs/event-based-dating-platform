@@ -48,13 +48,13 @@
                             <!-- End List -->
                         </div>
 
-                        {{--                            <div class="mt-auto">--}}
-                        {{--                                <a class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-transparent bg-yellow-400 text-black hover:bg-yellow-500 focus:outline-hidden focus:bg-yellow-500 transition disabled:opacity-50 disabled:pointer-events-none"--}}
-                        {{--                                   href="{{ route('events.show', $event) }}"--}}
-                        {{--                                >--}}
-                        {{--                                    View Details--}}
-                        {{--                                </a>--}}
-                        {{--                            </div>--}}
+                        <div class="mt-auto">
+                            <a class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-transparent bg-yellow-400 text-black hover:bg-yellow-500 focus:outline-hidden focus:bg-yellow-500 transition disabled:opacity-50 disabled:pointer-events-none"
+                               href="{{ route('events.show', $event) }}"
+                            >
+                                View Details
+                            </a>
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -63,7 +63,7 @@
 
         <!-- Pagination -->
         <div class="flex justify-center">
-            {{ $events->links() }}
+            @include('components.simple-pagination', ['paginator' => $events])
         </div>
     @else
     @endif

@@ -17,7 +17,7 @@
                     </h1>
                     @if($user->relationship_intent)
                         <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">
-                            {{ $user->relationship_intent->label() }}
+                            {{ $user->age }}, {{ $user->relationship_intent->label() }}
                         </p>
                     @endif
                 </div>
@@ -114,14 +114,14 @@
                                 </p>
 
                                 @if(!$isOwnProfile)
+                                    <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400 max-w-sm mx-auto">
+                                        You might have attended the same events.
+                                    </p>
                                     <div class="mt-8">
-                                        <button type="button"
-                                                class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-xl border border-transparent bg-yellow-400 text-black hover:bg-yellow-500 focus:outline-hidden focus:bg-yellow-500 transition cursor-pointer">
-                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                            </svg>
-                                            Send Connection Request
-                                        </button>
+                                        <a href="{{ route('events.index') }}"
+                                           class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-transparent bg-yellow-400 text-black hover:bg-yellow-500 focus:outline-hidden focus:bg-yellow-500 transition disabled:opacity-50 disabled:pointer-events-none cursor-pointer">
+                                            Browse events
+                                        </a>
                                     </div>
                                 @endif
                             </div>
@@ -132,60 +132,4 @@
         </div>
     </div>
 </div>
-
-<!-- Image Modal -->
-@if($hasFullAccess && $user->profileImages->count() > 0)
-    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
-        <div class="max-w-4xl max-h-screen p-4">
-            <div class="bg-white rounded-lg overflow-hidden">
-                <div class="flex justify-between items-center p-4 border-b">
-                    <h3 class="text-lg font-medium">{{ $user->full_name ?? $user->name }}'s Photos</h3>
-                    <button onclick="closeImageModal()" class="text-gray-400 hover:text-gray-600 cursor-pointer">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="p-4">
-                    <div class="relative">
-                        <img id="modalImage" class="w-full h-auto max-h-96 object-contain rounded-lg" src="" alt="Profile photo">
-
-                        @if($user->profileImages->count() > 1)
-                            <!-- Navigation arrows -->
-                            <button onclick="previousImage()" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 cursor-pointer">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-                            <button onclick="nextImage()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 cursor-pointer">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        @endif
-                    </div>
-
-                    @if($user->profileImages->count() > 1)
-                        <!-- Image counter -->
-                        <div class="text-center mt-4">
-                            <span id="imageCounter" class="text-sm text-gray-500">1 of {{ $user->profileImages->count() }}</span>
-                        </div>
-
-                        <!-- Thumbnails -->
-                        <div class="flex justify-center mt-4 space-x-2">
-                            @foreach($user->profileImages as $image)
-                                <img class="h-12 w-12 rounded object-cover border-2 border-transparent cursor-pointer thumbnail"
-                                     src="{{ Storage::url($image->image_path) }}"
-                                     alt="Thumbnail {{ $loop->index + 1 }}"
-                                     onclick="showImage({{ $loop->index }})"
-                                     data-index="{{ $loop->index }}">
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
-
 @endsection
