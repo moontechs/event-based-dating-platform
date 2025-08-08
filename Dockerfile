@@ -1,25 +1,6 @@
 # Multi-stage build for Laravel with FrankenPHP
-FROM node:20-alpine AS node-builder
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-WORKDIR /app
-
-# Copy package files and install dependencies
-COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
-
-# Copy source files
-COPY . .
-
-# Copy vendor from composer stage (needed for JS imports)
-COPY --from=composer-builder /app/vendor ./vendor
-
-# Build assets
-RUN pnpm run build
-
-# Composer stage
+# Composer stage (must come first for dependencies)
 FROM composer:2 AS composer-builder
 
 # Install required PHP extensions for composer dependencies
@@ -45,6 +26,27 @@ COPY composer.json composer.lock ./
 
 # Install PHP dependencies (production only)
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+
+# Node.js stage for building assets
+FROM node:20-alpine AS node-builder
+
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package.json pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile
+
+# Copy source files
+COPY . .
+
+# Copy vendor from composer stage (needed for JS imports)
+COPY --from=composer-builder /app/vendor ./vendor
+
+# Build assets
+RUN pnpm run build
 
 # Final production stage with FrankenPHP
 FROM dunglas/frankenphp:1-php8.4
