@@ -136,6 +136,9 @@ COPY --from=node-builder --chown=www-data:www-data /app/public/build ./public/bu
 # Copy application files
 COPY --chown=www-data:www-data . .
 
+# Copy custom Caddyfile
+COPY --chown=root:root Caddyfile /etc/caddy/Caddyfile
+
 # Create required directories and set permissions
 RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
